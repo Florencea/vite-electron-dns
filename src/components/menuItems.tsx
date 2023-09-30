@@ -1,6 +1,5 @@
 import { GlobalOutlined, SecurityScanOutlined } from "@ant-design/icons";
 import { MenuItemType } from "antd/es/menu/hooks/useItems";
-import { fromPairs } from "lodash-es";
 
 export const menuItems: MenuItemType[] = [
   {
@@ -15,4 +14,6 @@ export const menuItems: MenuItemType[] = [
   },
 ];
 
-export const routeNamesMap = fromPairs(menuItems.map((m) => [m.key, m.label]));
+export const routeNamesMap = Object.fromEntries(
+  menuItems.map((m) => [m.key, m.label]),
+);

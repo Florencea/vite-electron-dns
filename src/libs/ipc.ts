@@ -1,5 +1,4 @@
 import { ipcRenderer } from "electron";
-import { isNil } from "lodash-es";
 
 export interface IpcResT<DataT = unknown> {
   msg?: string;
@@ -14,7 +13,7 @@ export const $ipcGet = async <DataT = unknown, ParamsT = unknown>(
     channel,
     params,
   );
-  if (isNil(data)) {
+  if (data == null) {
     throw new Error(msg);
   }
   return data;
@@ -28,7 +27,7 @@ export const $ipcPost = async <DataT = unknown, ReqDataT = unknown>(
     channel,
     reqData,
   );
-  if (isNil(data)) {
+  if (data == null) {
     throw new Error(msg);
   }
   return data;

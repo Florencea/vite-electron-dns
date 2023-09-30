@@ -4,7 +4,6 @@ import {
   SwapRightOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-import { isEmpty } from "lodash-es";
 import { Input } from "../components/Input";
 import { TextArea } from "../components/TextArea";
 import useDoh from "../hooks/useDoh";
@@ -35,11 +34,7 @@ export default function Doh() {
           disabled={isLoading}
         />
         <div className="self-center flex flex-col gap-3">
-          <Button
-            {...buttonProps}
-            type="primary"
-            disabled={isLoading || isEmpty(host)}
-          >
+          <Button {...buttonProps} type="primary" disabled={isLoading || !host}>
             {isLoading ? <LoadingOutlined /> : <SwapRightOutlined />}
           </Button>
           <Button

@@ -4,7 +4,6 @@ import {
   SwapRightOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
-import { isEmpty } from "lodash-es";
 import { TextArea } from "../components/TextArea";
 import useDns from "../hooks/useDns";
 
@@ -39,7 +38,7 @@ export default function Dns() {
           <Button
             {...buttonProps}
             type="primary"
-            disabled={isLoading || isEmpty(hosts)}
+            disabled={isLoading || !hosts}
           >
             {isLoading ? <LoadingOutlined /> : <SwapRightOutlined />}
           </Button>
