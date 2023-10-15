@@ -26,7 +26,6 @@ npm run format
 ## Things that Electron Forge Docs didn't Say
 
 - If you scaffolding a project by using [Vite + TypeScript instruction](https://www.electronforge.io/templates/vite-+-typescript)
-- In addition to set `webPreference: { nodeIntegration: true }` in `src/renderer.ts`, you must use [vite-plugin-electron-renderer](https://github.com/electron-vite/vite-plugin-electron-renderer) in `vite.renderer.config.ts` for use NodeJS API (Ex. ipcRenderer) in renderer process
 - Use [`@vitejs/plugin-react`](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#readme) instead of [`@vitejs/plugin-react-swc`](https://github.com/vitejs/vite-plugin-react-swc) because tsconfig is not resolved by `@vitejs/plugin-react-swc`, whitch cause error in ESM import for Electron
 - Use `HashRouter` from `react-router-dom` instead of `BrowserRouter`. Electron load files but not url in production mode, which conflict to frontend redirecting
 
