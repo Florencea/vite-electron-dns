@@ -1,7 +1,7 @@
 # Vite Dreaming Next Sparkling
 
-- This is a DNS and DoH tool created by Electron Forge and Vite, antd, TailwindCSS
-- The tool could test specific domain name resolved by multiple DNS Server, also by DNS over HTTPS
+- This is a DoH tool created by Electron Forge and Vite, antd, TailwindCSS
+- The tool could test specific domain name resolved by multiple DNS Server
 
 ## Commands
 

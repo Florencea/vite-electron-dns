@@ -1,6 +1,5 @@
-import { BrowserWindow, app, ipcMain, shell } from "electron";
+import { BrowserWindow, Menu, app, ipcMain, shell } from "electron";
 import path from "node:path";
-import { getDnsResults } from "./libs/dns";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -39,19 +38,15 @@ const createWindow = () => {
     icon: path.join(process.env.VITE_PUBLIC, "icon.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true,
-      contextIsolation: false,
-      webSecurity: false,
-      allowRunningInsecureContent: true,
     },
   });
 
   // disable windows menu bar
-  // win.setMenu(null);
+  win.setMenu(null);
 
   if (app.isPackaged) {
     // disable macOS menu bar
-    // Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+    Menu.setApplicationMenu(Menu.buildFromTemplate([]));
     win.loadFile(indexHtml);
   } else {
     // Open the DevTools.
@@ -104,20 +99,3 @@ ipcMain.handle("open-win", (event, arg) => {
     childWindow.loadURL(`${devUrl}/#${arg}`);
   }
 });
-
-ipcMain.handle(
-  "dns",
-  async (_, reqData: { hosts: string; servers: string[] }) => {
-    try {
-      const resultsStr = await Promise.all(
-        reqData.servers.map(async (server) => {
-          const results = await getDnsResults({ hosts: reqData.hosts, server });
-          return results;
-        }),
-      );
-      return { msg: "ok", data: resultsStr };
-    } catch (error) {
-      return { msg: `DNS ERROR|${error.message}` };
-    }
-  },
-);

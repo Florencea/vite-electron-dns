@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import Dns from "./pages/Dns";
 import Doh from "./pages/Doh";
 
 export default function App() {
@@ -11,11 +10,7 @@ export default function App() {
       children: [
         {
           path: "",
-          element: <Navigate to="dns" replace />,
-        },
-        {
-          path: "dns",
-          element: <Dns />,
+          element: <Navigate to="doh" replace />,
         },
         {
           path: "doh",

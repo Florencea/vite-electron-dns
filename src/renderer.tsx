@@ -1,5 +1,5 @@
 import { StyleProvider } from "@ant-design/cssinjs";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App as AntApp, ConfigProvider, theme } from "antd";
 import zhTW from "antd/es/locale/zh_TW";
 import "dayjs/locale/zh-tw";
@@ -9,7 +9,6 @@ import { HashRouter } from "react-router-dom";
 import "tailwindcss/tailwind.css";
 import tailwindConfig from "../tailwind.config";
 import App from "./App";
-import queryClientIpc from "./libs/queryClientIpc";
 
 const container = document.getElementById("root") as HTMLDivElement;
 
@@ -17,7 +16,21 @@ const PRIMARY_COLOR = tailwindConfig.theme.extend.colors.primary;
 
 createRoot(container).render(
   <StrictMode>
-    <QueryClientProvider client={queryClientIpc}>
+    <QueryClientProvider
+      client={
+        new QueryClient({
+          defaultOptions: {
+            queries: {
+              refetchOnWindowFocus: false,
+              retry: false,
+            },
+            mutations: {
+              retry: false,
+            },
+          },
+        })
+      }
+    >
       <HashRouter>
         <ConfigProvider
           locale={zhTW}
