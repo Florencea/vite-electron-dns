@@ -20,8 +20,6 @@ export default function Doh() {
   } = useDoh([
     { title: "Google", server: "https://dns.google/resolve" },
     { title: "Cloudflare", server: "https://cloudflare-dns.com/dns-query" },
-    { title: "Quad101", server: "https://dns.twnic.tw/dns-query" },
-    { title: "NextDNS", server: "https://dns.nextdns.io" },
   ]);
   return (
     <div className="w-full h-full p-4">

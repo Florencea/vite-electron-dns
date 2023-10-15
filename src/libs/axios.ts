@@ -18,3 +18,26 @@ export const $get = async <DataT = unknown>(option: AxiosRequestConfig) => {
   const { data } = res;
   return data;
 };
+
+export const $doh = async (
+  url: string,
+  name: string,
+  signal: AbortSignal,
+): Promise<{
+  Answer: { type: number; data: string }[];
+}> => {
+  const fullUrl = new URL(url);
+  fullUrl.searchParams.set("name", name);
+  const res = await fetch(
+    new Request(fullUrl, {
+      method: "GET",
+      signal,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/dns-json",
+      },
+    }),
+  );
+  const data = await res.json();
+  return data;
+};

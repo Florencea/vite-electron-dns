@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, app, ipcMain, shell } from "electron";
+import { BrowserWindow, app, ipcMain, shell } from "electron";
 import path from "node:path";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -42,11 +42,11 @@ const createWindow = () => {
   });
 
   // disable windows menu bar
-  win.setMenu(null);
+  // win.setMenu(null);
 
   if (app.isPackaged) {
     // disable macOS menu bar
-    Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+    // Menu.setApplicationMenu(Menu.buildFromTemplate([]));
     win.loadFile(indexHtml);
   } else {
     // Open the DevTools.
