@@ -5,57 +5,73 @@ import {
 } from "@ant-design/icons";
 import { App, ButtonProps } from "antd";
 import { InputProps } from "antd/es/input";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useDohRequest from "./useDohRequest";
 
 const useDoh = (servers: { title: string; server: string }[]) => {
-  const { modal } = App.useApp();
+  const { message } = App.useApp();
   const [host, setHost] = useState("");
   const [resultsA, setResultsA] = useState([]);
   const [resultsAAAA, setResultsAAAA] = useState([]);
   const [enabled, setEnabled] = useState(false);
-  const { isFetching: isFetchingA } = useDohRequest(
-    ["dohA"],
+  const {
+    data: dataA,
+    isFetching: isFetchingA,
+    isSuccess: isSuccessA,
+  } = useDohRequest(
     servers.map(({ server }) => ({ url: server, name: host, type: "A" })),
     {
+      queryKey: ["dohA"],
       enabled,
-      onSuccess: (data) => {
-        setEnabled(false);
-        setResultsA(data.map((d) => d?.Answer?.map((d) => d.data)?.join("\n")));
-      },
-      onError: (err) => {
-        setEnabled(false);
-        modal.error({
-          title: "DoH ERROR",
-          content: (err as { message: string })?.message,
-          icon: null,
-          okText: "OK",
-        });
+      meta: {
+        onError: (err: Error) => {
+          setEnabled(false);
+          message.error({
+            content: `ipv4: ${err?.message}`,
+            icon: null,
+            duration: 4.5,
+          });
+        },
       },
     },
   );
-  const { isFetching: isFetchingAAAA } = useDohRequest(
-    ["dohAAAA"],
+  const {
+    data: dataAAAA,
+    isFetching: isFetchingAAAA,
+    isSuccess: isSuccessAAAA,
+  } = useDohRequest(
     servers.map(({ server }) => ({ url: server, name: host, type: "AAAA" })),
     {
+      queryKey: ["dohAAAA"],
       enabled,
-      onSuccess: (data) => {
-        setEnabled(false);
-        setResultsAAAA(
-          data.map((d) => d?.Answer?.map((d) => d.data)?.join("\n")),
-        );
-      },
-      onError: (err) => {
-        setEnabled(false);
-        modal.error({
-          title: "DoH ERROR",
-          content: (err as { message: string })?.message,
-          icon: null,
-          okText: "OK",
-        });
+      meta: {
+        onError: (err: Error) => {
+          setEnabled(false);
+          message.error({
+            content: `ipv6: ${err?.message}`,
+            icon: null,
+            duration: 4.5,
+          });
+        },
       },
     },
   );
+
+  useEffect(() => {
+    if (isSuccessA) {
+      setEnabled(false);
+      setResultsA(dataA.map((d) => d?.Answer?.map((d) => d.data)?.join("\n")));
+    }
+  }, [dataA, isSuccessA]);
+
+  useEffect(() => {
+    if (isSuccessAAAA) {
+      setEnabled(false);
+      setResultsAAAA(
+        dataAAAA.map((d) => d?.Answer?.map((d) => d.data)?.join("\n")),
+      );
+    }
+  }, [dataAAAA, isSuccessAAAA]);
 
   const isLoading = isFetchingA || isFetchingAAAA;
 
@@ -63,6 +79,12 @@ const useDoh = (servers: { title: string; server: string }[]) => {
     setHost("");
     setResultsA([]);
     setResultsAAAA([]);
+  }, []);
+
+  const submit = useCallback(() => {
+    setResultsA([]);
+    setResultsAAAA([]);
+    setEnabled(true);
   }, []);
 
   const inputProps: InputProps = useMemo(
@@ -77,11 +99,11 @@ const useDoh = (servers: { title: string; server: string }[]) => {
       },
       onKeyDown: (e) => {
         if (e.code === "Enter") {
-          setEnabled(true);
+          submit();
         }
       },
     }),
-    [host, isLoading],
+    [host, isLoading, submit],
   );
 
   const btnSubmitProps: ButtonProps = useMemo(
@@ -89,11 +111,11 @@ const useDoh = (servers: { title: string; server: string }[]) => {
       type: "primary",
       disabled: isLoading || !host,
       onClick: () => {
-        setEnabled(true);
+        submit();
       },
       children: isLoading ? <LoadingOutlined /> : <SwapRightOutlined />,
     }),
-    [host, isLoading],
+    [host, isLoading, submit],
   );
 
   const btnClearProps: ButtonProps = useMemo(

@@ -1,5 +1,9 @@
 import { StyleProvider } from "@ant-design/cssinjs";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { App as AntApp, ConfigProvider, theme } from "antd";
 import zhTW from "antd/es/locale/zh_TW";
 import "dayjs/locale/zh-tw";
@@ -28,6 +32,13 @@ createRoot(container).render(
               retry: false,
             },
           },
+          queryCache: new QueryCache({
+            onError: (error, query) => {
+              if (query.meta?.onError) {
+                return query.meta.onError(error, query);
+              }
+            },
+          }),
         })
       }
     >
