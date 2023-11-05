@@ -11,12 +11,13 @@ export const Layout = () => {
 
   return (
     <AntLayout>
-      <header className="fixed z-10 w-full flex justify-between items-center px-6 py-0 bg-[#001529] shadow-sm">
+      <header className="fixed z-10 w-full flex justify-between items-center px-6 py-0 bg-[#141414] shadow-sm">
         <div className="w-full text-white tracking-wider text-lg font-bold flex justify-start items-center gap-2">
           <img src={logo} alt="logo" className="w-[36px] h-[36px]" />
-          Vite Dreaming Next Sparkling
+          Vite Electron DoH
           <div className="grow">
             <Menu
+              className="bg-[#141414]"
               theme="dark"
               translate="no"
               items={menuItems}

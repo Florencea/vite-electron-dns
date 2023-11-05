@@ -89,7 +89,7 @@ const useDoh = (servers: { title: string; server: string }[]) => {
 
   const inputProps: InputProps = useMemo(
     () => ({
-      title: `Domain Name\n(Single)`,
+      title: `Domain Name\n(Press Enter to submit)`,
       className: "w-[300px]",
       allowClear: true,
       disabled: isLoading,
