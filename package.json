@@ -1,6 +1,6 @@
 {
-  "name": "vite-dreaming-next-sparkling",
-  "productName": "Vite Dreaming Next Sparkling",
+  "name": "vite-electron-doh",
+  "productName": "Vite Electron DoH",
   "version": "1.0.0",
   "description": "A DoH tool created by Electron Forge and Vite, antd, TailwindCSS",
   "main": ".vite/build/main.js",
