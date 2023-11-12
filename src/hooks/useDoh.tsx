@@ -16,6 +16,7 @@ const useDoh = (servers: { title: string; server: string }[]) => {
   const [enabled, setEnabled] = useState(false);
   const {
     data: dataA,
+    error: errorA,
     isFetching: isFetchingA,
     isSuccess: isSuccessA,
   } = useDohRequest(
@@ -23,20 +24,11 @@ const useDoh = (servers: { title: string; server: string }[]) => {
     {
       queryKey: ["dohA"],
       enabled,
-      meta: {
-        onError: (err: Error) => {
-          setEnabled(false);
-          message.error({
-            content: `ipv4: ${err?.message}`,
-            icon: null,
-            duration: 4.5,
-          });
-        },
-      },
     },
   );
   const {
     data: dataAAAA,
+    error: errorAAAA,
     isFetching: isFetchingAAAA,
     isSuccess: isSuccessAAAA,
   } = useDohRequest(
@@ -44,16 +36,6 @@ const useDoh = (servers: { title: string; server: string }[]) => {
     {
       queryKey: ["dohAAAA"],
       enabled,
-      meta: {
-        onError: (err: Error) => {
-          setEnabled(false);
-          message.error({
-            content: `ipv6: ${err?.message}`,
-            icon: null,
-            duration: 4.5,
-          });
-        },
-      },
     },
   );
 
@@ -72,6 +54,28 @@ const useDoh = (servers: { title: string; server: string }[]) => {
       );
     }
   }, [dataAAAA, isSuccessAAAA]);
+
+  useEffect(() => {
+    if (errorA) {
+      setEnabled(false);
+      message.error({
+        content: `ipv4: ${(errorA as Error)?.message}`,
+        icon: null,
+        duration: 4.5,
+      });
+    }
+  }, [errorA, message]);
+
+  useEffect(() => {
+    if (errorAAAA) {
+      setEnabled(false);
+      message.error({
+        content: `ipv6: ${(errorAAAA as Error)?.message}`,
+        icon: null,
+        duration: 4.5,
+      });
+    }
+  }, [errorA, errorAAAA, message]);
 
   const isLoading = isFetchingA || isFetchingAAAA;
 
