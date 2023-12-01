@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext ts,tsx . && tsc",
-    "format": "prettier '**/*' --write --ignore-unknown --cache"
+    "format": "prettier \"**/*\" --write --ignore-unknown --cache"
   },
   "devDependencies": {
     "@ant-design/cssinjs": "^1.18.0",
