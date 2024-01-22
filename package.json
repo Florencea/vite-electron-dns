@@ -14,7 +14,7 @@
     "format": "prettier \"**/*\" --write --ignore-unknown --cache"
   },
   "devDependencies": {
-    "@ant-design/cssinjs": "^1.18.2",
+    "@ant-design/cssinjs": "^1.18.4",
     "@electron-forge/cli": "^7.2.0",
     "@electron-forge/maker-deb": "^7.2.0",
     "@electron-forge/maker-rpm": "^7.2.0",
