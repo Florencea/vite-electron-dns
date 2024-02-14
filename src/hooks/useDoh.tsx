@@ -11,8 +11,8 @@ import useDohRequest from "./useDohRequest";
 const useDoh = (servers: { title: string; server: string }[]) => {
   const { message } = App.useApp();
   const [host, setHost] = useState("");
-  const [resultsA, setResultsA] = useState([]);
-  const [resultsAAAA, setResultsAAAA] = useState([]);
+  const [resultsA, setResultsA] = useState<string[]>([]);
+  const [resultsAAAA, setResultsAAAA] = useState<string[]>([]);
   const [enabled, setEnabled] = useState(false);
   const {
     data: dataA,

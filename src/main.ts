@@ -35,7 +35,7 @@ const createWindow = () => {
     height: 600,
     resizable: false,
     fullscreenable: false,
-    icon: path.join(process.env.VITE_PUBLIC, "icon.svg"),
+    icon: path.join(process.env.VITE_PUBLIC ?? "/", "icon.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -86,7 +86,7 @@ app.on("activate", () => {
 });
 
 // new window example arg: new windows url
-ipcMain.handle("open-win", (event, arg) => {
+ipcMain.handle("open-win", (_, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
       preload,
