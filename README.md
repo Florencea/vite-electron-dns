@@ -27,7 +27,7 @@ npm run format
 
 - If you scaffolding a project by using [Vite + TypeScript instruction](https://www.electronforge.io/templates/vite-+-typescript)
 - Use [`@vitejs/plugin-react`](https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#readme) instead of [`@vitejs/plugin-react-swc`](https://github.com/vitejs/vite-plugin-react-swc) because tsconfig is not resolved by `@vitejs/plugin-react-swc`, whitch cause error in ESM import for Electron
-- Use `HashRouter` from `react-router-dom` instead of `BrowserRouter`. Electron load files but not url in production mode, which conflict to frontend redirecting
+- Use `HashRouter` instead of `BrowserRouter`. Electron load files but not url in production mode, which conflict to frontend redirecting
 
 ## Notice
 
