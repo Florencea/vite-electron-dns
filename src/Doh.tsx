@@ -4,7 +4,7 @@ import {
   SwapRightOutlined,
 } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
-import { App, Button, Form, Input, Typography } from "antd";
+import { App, Button, Flex, Form, Input, Space, Typography } from "antd";
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -81,69 +81,74 @@ export const Doh = () => {
   const host = Form.useWatch("host", form);
 
   return (
-    <div className="w-full h-svh p-4">
-      <div className="w-full h-full flex justify-between items-stretch gap-2">
-        <div className="flex flex-col">
-          <Text className="whitespace-pre-wrap">{`Domain Name\n(Press Enter to submit)`}</Text>
-          <Form
-            form={form}
-            initialValues={{ host: "" }}
-            onFinish={async (values: { host: string }) => {
-              await ipv4.mutateAsync(values.host);
-              await ipv6.mutateAsync(values.host);
-            }}
-          >
-            <Form.Item name="host" noStyle>
-              <Input
-                autoFocus
-                className="w-[300px]"
-                size="middle"
-                disabled={isLoading}
-              />
-            </Form.Item>
-          </Form>
-        </div>
-        <div className="self-center flex flex-col gap-3">
-          <Button
-            type="primary"
-            disabled={isLoading || !host}
-            onClick={() => {
-              form.submit();
-            }}
-          >
-            {isLoading ? <LoadingOutlined /> : <SwapRightOutlined />}
-          </Button>
-          <Button
-            danger
+    <Flex
+      style={{
+        width: "100%",
+        height: "100svh",
+        padding: 16,
+        boxSizing: "border-box",
+      }}
+      justify="space-between"
+      align="stretch"
+      gap={16}
+    >
+      <Flex vertical>
+        <Text
+          style={{ whiteSpace: "pre-wrap" }}
+        >{`Domain Name\n(Press Enter to submit)`}</Text>
+        <Form
+          form={form}
+          initialValues={{ host: "" }}
+          onFinish={async (values: { host: string }) => {
+            await ipv4.mutateAsync(values.host);
+            await ipv6.mutateAsync(values.host);
+          }}
+        >
+          <Form.Item name="host" noStyle>
+            <Input style={{ width: 300 }} autoFocus disabled={isLoading} />
+          </Form.Item>
+        </Form>
+      </Flex>
+      <Space style={{ alignSelf: "center" }} direction="vertical">
+        <Button
+          type="primary"
+          disabled={isLoading || !host}
+          onClick={() => {
+            form.submit();
+          }}
+        >
+          {isLoading ? <LoadingOutlined /> : <SwapRightOutlined />}
+        </Button>
+        <Button
+          danger
+          disabled={isLoading}
+          onClick={() => {
+            form.resetFields();
+            form.submit();
+          }}
+        >
+          <ClearOutlined />
+        </Button>
+      </Space>
+      {SERVERS.map(({ title, server }, idx) => (
+        <Flex style={{ flexGrow: 1 }} key={server} vertical>
+          <Text
+            style={{ whiteSpace: "pre-wrap" }}
+          >{`${title}\n(${server})`}</Text>
+          <TextArea
+            style={{ flexGrow: 1 }}
+            value={
+              ipv4?.data
+                ? ipv4.data.map((a, idx) =>
+                    [a, ipv6?.data?.[idx]].join("\n"),
+                  )?.[idx]
+                : ""
+            }
+            readOnly
             disabled={isLoading}
-            onClick={() => {
-              form.resetFields();
-              form.submit();
-            }}
-          >
-            <ClearOutlined />
-          </Button>
-        </div>
-        {SERVERS.map(({ title, server }, idx) => (
-          <div key={server} className="flex flex-col grow">
-            <Text className="whitespace-pre-wrap">{`${title}\n(${server})`}</Text>
-            <div className="flex grow">
-              <TextArea
-                className="self-stretch grow h-full"
-                value={
-                  ipv4?.data
-                    ? ipv4.data.map((a, idx) =>
-                        [a, ipv6?.data?.[idx]].join("\n"),
-                      )?.[idx]
-                    : ""
-                }
-                readOnly
-                disabled={isLoading}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          />
+        </Flex>
+      ))}
+    </Flex>
   );
 };

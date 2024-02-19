@@ -1,6 +1,6 @@
 # Vite Electron DoH
 
-- This is a DoH tool created by Electron Forge and Vite, antd, TailwindCSS
+- This is a DoH tool created by Electron Forge and Vite, antd
 - The tool could test specific domain name resolved by multiple DNS Server
 
 ## Commands
