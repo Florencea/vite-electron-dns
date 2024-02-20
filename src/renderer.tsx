@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App, ConfigProvider, theme } from "antd";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Doh } from "./Doh";
+import { Page } from "./Page";
 
 const container = document.getElementById("root") as HTMLDivElement;
 
@@ -23,7 +23,7 @@ createRoot(container).render(
         getPopupContainer={() => container}
       >
         <App>
-          <Doh />
+          <Page />
         </App>
       </ConfigProvider>
     </QueryClientProvider>

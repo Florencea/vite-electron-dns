@@ -7,6 +7,6 @@ export default defineConfig({
     reportCompressedSize: false,
   },
   resolve: {
-    mainFields: ["browser", "module", "jsnext:main", "jsnext"],
+    mainFields: ["module", "jsnext:main", "jsnext"],
   },
 });

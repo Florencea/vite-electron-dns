@@ -1,9 +1,9 @@
 {
-  "name": "vite-electron-doh",
-  "productName": "Vite Electron DoH",
+  "name": "vite-electron-dns",
+  "productName": "Vite Electron DNS",
   "version": "1.0.0",
   "type": "commonjs",
-  "description": "A DoH tool created by Electron Forge and Vite, antd, TailwindCSS",
+  "description": "A DNS/DoH tool created by Electron Forge and Vite, antd",
   "main": ".vite/build/main.js",
   "scripts": {
     "dev": "electron-forge start",
@@ -37,7 +37,8 @@
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "typescript-eslint": "^7.0.2"
+    "typescript-eslint": "^7.0.2",
+    "vite-plugin-electron-renderer": "^0.14.5"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0"
