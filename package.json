@@ -20,7 +20,9 @@
     "@electron-forge/maker-squirrel": "^7.3.0",
     "@electron-forge/maker-zip": "^7.3.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.3.0",
+    "@electron-forge/plugin-fuses": "^7.3.0",
     "@electron-forge/plugin-vite": "^7.3.0",
+    "@electron/fuses": "^1.7.0",
     "@tanstack/react-query": "^5.22.2",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.57",
@@ -38,6 +40,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "typescript-eslint": "^7.0.2",
+    "vite": "^5.1.4",
     "vite-plugin-electron-renderer": "^0.14.5"
   },
   "dependencies": {
