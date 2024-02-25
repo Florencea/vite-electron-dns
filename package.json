@@ -23,7 +23,7 @@
     "@electron-forge/plugin-fuses": "^7.3.0",
     "@electron-forge/plugin-vite": "^7.3.0",
     "@electron/fuses": "^1.7.0",
-    "@tanstack/react-query": "^5.22.2",
+    "@tanstack/react-query": "^5.24.1",
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19",
