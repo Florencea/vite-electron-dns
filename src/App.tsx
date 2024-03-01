@@ -168,7 +168,7 @@ export default function App() {
           </View>
           <View paddingBottom="size-200">
             <Grid
-              columns={repeat("auto-fill", minmax("size-3000", "1fr"))}
+              columns={repeat("auto-fill", minmax("300px", "1fr"))}
               gap="size-200"
             >
               {SERVERS.filter((s) => {

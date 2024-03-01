@@ -1,5 +1,6 @@
 import { BrowserWindow, app, ipcMain, shell } from "electron";
 import { promises } from "node:dns";
+import { isIPv4, isIPv6 } from "node:net";
 import path from "node:path";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -33,6 +34,7 @@ const createWindow = () => {
     title: "Loading...",
     width: 800,
     height: 600,
+    minWidth: 800,
     // resizable: false,
     fullscreenable: false,
     icon: path.join(process.env.VITE_PUBLIC ?? "/", "icon.svg"),
@@ -138,7 +140,15 @@ const fetchDns = async ({ server, name, type }: DnsQueryT): Promise<string> => {
     }
     const data = [
       `${type === "A" ? "ipv4: " : "\nipv6: "}${(t1 - t0).toFixed(2)}ms`,
-      ...(ans.Answer ?? []).map((d) => d.data),
+      ...(ans.Answer ?? [])
+        .map((d) => d.data)
+        .filter((ip) => {
+          if (type === "A") {
+            return isIPv4(ip);
+          } else {
+            return isIPv6(ip);
+          }
+        }),
     ].join("\n");
     return data;
   } catch {
