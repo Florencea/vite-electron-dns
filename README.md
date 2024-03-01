@@ -1,10 +1,7 @@
 # Vite Electron DNS
 
-- This is a DNS/DoH tool created by Electron Forge and Vite, antd
+- This is a DNS/DoH tool created by Electron Forge and Vite
 - The tool could test specific domain name resolved by multiple DNS Server
-
-![dns](dns.avif)
-![doh](doh.avif)
 
 ## Commands
 

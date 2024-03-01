@@ -24,7 +24,6 @@ if (!app.requestSingleInstanceLock()) {
 
 let win: BrowserWindow | null = null;
 
-const preload = path.join(process.env.DIST, "preload.js");
 const devUrl = MAIN_WINDOW_VITE_DEV_SERVER_URL;
 const indexHtml = path.join(process.env.VITE_PUBLIC, "index.html");
 
@@ -32,13 +31,12 @@ const createWindow = () => {
   // Create the browser window.
   win = new BrowserWindow({
     title: "Loading...",
-    width: 1440,
+    width: 800,
     height: 600,
-    resizable: false,
+    // resizable: false,
     fullscreenable: false,
     icon: path.join(process.env.VITE_PUBLIC ?? "/", "icon.svg"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       contextIsolation: false,
       devTools: !app.isPackaged,
@@ -91,11 +89,7 @@ app.on("activate", () => {
 
 // new window example arg: new windows url
 ipcMain.handle("open-win", (_, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-    },
-  });
+  const childWindow = new BrowserWindow();
 
   if (app.isPackaged) {
     childWindow.loadFile(indexHtml, { hash: arg });
@@ -143,7 +137,7 @@ const fetchDns = async ({ server, name, type }: DnsQueryT): Promise<string> => {
       return "";
     }
     const data = [
-      `${(t1 - t0).toFixed(2)}ms`,
+      `${type === "A" ? "ipv4: " : "\nipv6: "}${(t1 - t0).toFixed(2)}ms`,
       ...(ans.Answer ?? []).map((d) => d.data),
     ].join("\n");
     return data;
@@ -162,12 +156,12 @@ const resolveDns = async ({ ip, name, type }: DnsQueryT) => {
       const t0 = performance.now();
       const address = await resolver.resolve4(name);
       const t1 = performance.now();
-      return [`${(t1 - t0).toFixed(2)}ms`, ...address].join("\n");
+      return [`ipv4: ${(t1 - t0).toFixed(2)}ms`, ...address].join("\n");
     } else {
       const t0 = performance.now();
       const address = await resolver.resolve6(name);
       const t1 = performance.now();
-      return [`${(t1 - t0).toFixed(2)}ms`, ...address].join("\n");
+      return [`\nipv6: ${(t1 - t0).toFixed(2)}ms`, ...address].join("\n");
     }
   } catch {
     return "";
