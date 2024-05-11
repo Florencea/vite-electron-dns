@@ -1,3 +1,5 @@
-/public
-/out
-/.vite
+build
+dist
+out
+resources
+assets

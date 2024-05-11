@@ -1,40 +1,37 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const eslint = require("@eslint/js");
-const prettier = require("eslint-config-prettier");
-const reactHooks = require("eslint-plugin-react-hooks");
-const reactRefresh = require("eslint-plugin-react-refresh");
-const globals = require("globals");
-const tseslint = require("typescript-eslint");
+import eslint from "@eslint/js";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-module.exports = tseslint.config(
+const config = tseslint.config(
+  /**
+   * base
+   */
   eslint.configs.recommended,
+  /**
+   * typescript
+   */
   ...tseslint.configs.recommended,
+  /**
+   * react
+   */
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["src/renderer/src/**/*.{ts,tsx}"],
     languageOptions: {
       globals: globals.browser,
       parser: tseslint.parser,
     },
     plugins: {
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
     },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
-    },
+    rules: reactHooks.configs.recommended.rules,
   },
+  /**
+   * ignore
+   */
   {
-    files: ["eslint.config.js", "postcss.config.js", "tailwind.config.js"],
-    languageOptions: {
-      globals: globals.node,
-    },
+    ignores: ["build", "dist", "out", "resources", "assets"],
   },
-  {
-    ignores: [".vite", "out", "public", "src/vite-env.d.ts"],
-  },
-  prettier,
 );
+
+export default config;
