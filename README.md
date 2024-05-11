@@ -6,7 +6,7 @@
 ## Commands
 
 ```sh
-# Start Electron Forge Dev Server
+# Start electron-vite dev server
 npm run dev
 # Build production files package in /out
 npm run build
