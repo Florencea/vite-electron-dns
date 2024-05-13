@@ -40,16 +40,10 @@ export const App = () => {
   const isLoading = ipv4.isPending || ipv6.isPending;
 
   return (
-    <Provider
-      locale="en-US"
-      theme={defaultTheme}
-      UNSAFE_style={{
-        backgroundColor: "transparent",
-      }}
-    >
+    <Provider locale="en-US" theme={defaultTheme}>
       <View padding="size-200" paddingTop="size-400">
         <Flex
-          UNSAFE_className="draggable"
+          UNSAFE_className="draggable bg-[rgb(248,248,248)] dark:bg-[rgb(29,29,29)]"
           width="100%"
           position="fixed"
           top="size-0"
@@ -67,7 +61,6 @@ export const App = () => {
             borderColor="dark"
             borderRadius="medium"
             padding="size-250"
-            backgroundColor="transparent"
           >
             <Form
               isDisabled={isLoading}

@@ -9,7 +9,7 @@ import {
 } from "electron";
 import { Resolver } from "node:dns/promises";
 import { isIPv4, isIPv6 } from "node:net";
-import { fileURLToPath } from "node:url";
+import { URL, fileURLToPath } from "node:url";
 import icon from "../../resources/icon.png?asset";
 import { menu } from "./menu";
 import { store } from "./store";
@@ -26,9 +26,13 @@ const createWindow = () => {
     savedBounds.y > screenArea.y + screenArea.height;
 
   const indexUrl = process.env.ELECTRON_RENDERER_URL!;
-  const indexFile = fileURLToPath(
-    new URL("../renderer/index.html", import.meta.url),
-  );
+  // const indexFile = fileURLToPath(
+  //   new URL("../renderer/index.html", import.meta.url),
+  // );
+  const indexFile = new URL(
+    "../renderer/index.html",
+    import.meta.url,
+  ).toString();
   const preloadFile = fileURLToPath(
     new URL("../preload/index.js", import.meta.url),
   );
