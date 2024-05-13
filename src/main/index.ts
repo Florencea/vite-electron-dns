@@ -26,9 +26,6 @@ const createWindow = () => {
     savedBounds.y > screenArea.y + screenArea.height;
 
   const indexUrl = process.env.ELECTRON_RENDERER_URL!;
-  // const indexFile = fileURLToPath(
-  //   new URL("../renderer/index.html", import.meta.url),
-  // );
   const indexFile = new URL(
     "../renderer/index.html",
     import.meta.url,
