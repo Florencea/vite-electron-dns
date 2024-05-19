@@ -32,7 +32,7 @@
     "electron-vite": "^2.2.0",
     "eslint": "^9.3.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc-915b914b3a-20240515",
-    "globals": "^15.2.0",
+    "globals": "^15.3.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "react": "^18.3.1",
