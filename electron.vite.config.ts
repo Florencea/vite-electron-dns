@@ -1,5 +1,5 @@
-import react from "@vitejs/plugin-react-swc";
-import { defineConfig, externalizeDepsPlugin, swcPlugin } from "electron-vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { rmSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -10,10 +10,10 @@ if (process.env.NODE_ENV === "production") {
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin(), swcPlugin()],
+    plugins: [externalizeDepsPlugin()],
   },
   preload: {
-    plugins: [externalizeDepsPlugin(), swcPlugin()],
+    plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
         output: {
