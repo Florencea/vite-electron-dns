@@ -29,7 +29,7 @@
     "electron-builder": "^24.13.3",
     "electron-store": "^9.0.0",
     "electron-vite": "^2.2.0",
-    "eslint": "^9.4.0",
+    "eslint": "^9.5.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc-f994737d14-20240522",
     "globals": "^15.4.0",
     "postcss": "^8.4.38",
