@@ -27,7 +27,7 @@
     "dotenv": "^16.4.5",
     "electron": "^31.0.1",
     "electron-builder": "^24.13.3",
-    "electron-store": "^9.0.0",
+    "electron-store": "^10.0.0",
     "electron-vite": "^2.2.0",
     "eslint": "^9.5.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc-fb9a90fa48-20240614",
