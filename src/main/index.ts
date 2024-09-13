@@ -109,7 +109,7 @@ const fetchDns = async ({ server, name, type }: DnsQueryT): Promise<string> => {
     url.searchParams.set("type", type);
     const t0 = performance.now();
     const res = await fetch(
-      new Request(url, {
+      new Request(url.toString(), {
         method: "GET",
         headers: {
           Accept: "application/dns-json",
