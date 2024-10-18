@@ -41,20 +41,7 @@ export const App = () => {
 
   return (
     <Provider locale="en-US" theme={defaultTheme}>
-      <View padding="size-200" paddingTop="size-400">
-        <Flex
-          UNSAFE_className="draggable bg-[rgb(248,248,248)] dark:bg-[rgb(29,29,29)]"
-          width="100%"
-          position="fixed"
-          top="size-0"
-          left="size-0"
-          height="size-400"
-          justifyContent="center"
-          alignItems="center"
-          zIndex={1000}
-        >
-          <Text>{import.meta.env.VITE_TITLE}</Text>
-        </Flex>
+      <View padding="size-200" paddingTop="size-200">
         <Flex direction="column" gap="size-100">
           <View
             borderWidth="thin"

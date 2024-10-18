@@ -40,12 +40,9 @@ const createWindow = () => {
     minWidth: 720,
     minHeight: 320,
     autoHideMenuBar: true,
-    vibrancy: "fullscreen-ui",
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: { preload: preloadFile },
     title: import.meta.env.VITE_TITLE,
-    titleBarStyle: "hidden",
-    titleBarOverlay: true,
   });
 
   mainWindow.setBounds(
