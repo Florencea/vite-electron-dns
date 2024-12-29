@@ -40,5 +40,8 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^5.4.11"
+  },
+  "engines": {
+    "node": "22.12.0"
   }
 }
