@@ -40,7 +40,7 @@ export const App = () => {
   const isLoading = ipv4.isPending || ipv6.isPending;
 
   return (
-    <Provider locale="en-US" theme={defaultTheme}>
+    <Provider locale="en-US" theme={defaultTheme} UNSAFE_className="h-svh">
       <View padding="size-200" paddingTop="size-200">
         <Flex direction="column" gap="size-100">
           <View
