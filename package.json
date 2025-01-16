@@ -17,7 +17,7 @@
     "build:linux": "npm run build && electron-builder --config electron-builder-config.ts --linux"
   },
   "devDependencies": {
-    "@adobe/react-spectrum": "^3.38.1",
+    "@adobe/react-spectrum": "^3.39.0",
     "@eslint/js": "^9.18.0",
     "@tanstack/react-query": "^5.64.1",
     "@types/react": "^19.0.7",
@@ -43,11 +43,11 @@
   },
   "overrides": {
     "@adobe/react-spectrum": {
-      "react": "$react",
-      "react-dom": "$react-dom"
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
     },
     "electron-vite": {
-      "vite": "$vite"
+      "vite": "^6.0.7"
     }
   },
   "engines": {
