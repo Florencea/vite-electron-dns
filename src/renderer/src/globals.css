@@ -1,16 +1,1 @@
 @import "tailwindcss";
-
-body {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  -webkit-font-smoothing: auto !important;
-  -moz-osx-font-smoothing: auto !important;
-}
-
-.draggable {
-  -webkit-app-region: drag;
-}
-
-.non-draggable {
-  -webkit-app-region: no-drag;
-}
