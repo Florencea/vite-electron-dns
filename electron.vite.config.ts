@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { rmSync } from "node:fs";
@@ -37,6 +38,6 @@ export default defineConfig({
         "@resources": resolve("resources"),
       },
     },
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
   },
 });
