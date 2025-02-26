@@ -75,6 +75,20 @@ const SERVERS: ServerT[] = [
     ip: "168.95.192.1",
   },
   {
+    title: "AliDNS",
+    description: "A public DNS resolver operated by Alibaba Cloud (AliDNS)",
+    document: "https://www.alidns.com/",
+    server: "-",
+    ip: "223.5.5.5",
+  },
+  {
+    title: "BaiduDNS",
+    description: "A public DNS resolver operated by Baidu (BaiduDNS)",
+    document: "https://dudns.baidu.com/",
+    server: "-",
+    ip: "180.76.76.76",
+  },
+  {
     title: "System Default",
     description: "DNS provided by your operating system",
     document: "-",
