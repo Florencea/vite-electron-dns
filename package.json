@@ -23,7 +23,7 @@
     "@tanstack/react-query": "^5.74.4",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "@vitejs/plugin-react": "^4.4.0",
+    "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",
     "dotenv": "^16.5.0",
     "electron": "^35.1.5",
