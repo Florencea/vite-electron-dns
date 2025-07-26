@@ -65,6 +65,7 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(isDev ? indexUrl : indexFile);
+  mainWindow.webContents.openDevTools();
 };
 
 if (!app.requestSingleInstanceLock()) {
