@@ -1,37 +1,21 @@
-import eslint from "@eslint/js";
+import js from "@eslint/js";
 import reactHooks from "eslint-plugin-react-hooks";
+import { globalIgnores, defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-const config = tseslint.config(
-  /**
-   * base
-   */
-  eslint.configs.recommended,
-  /**
-   * typescript
-   */
-  ...tseslint.configs.recommended,
-  /**
-   * react
-   */
+export default defineConfig(
+  globalIgnores(["build", "dist", "out", "resources", "assets"]),
   {
-    files: ["src/renderer/src/**/*.{ts,tsx}"],
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs["recommended-latest"],
+    ],
     languageOptions: {
+      ecmaVersion: 2022,
       globals: globals.browser,
-      parser: tseslint.parser,
     },
-    plugins: {
-      "react-hooks": reactHooks,
-    },
-    rules: reactHooks.configs.recommended.rules,
-  },
-  /**
-   * ignore
-   */
-  {
-    ignores: ["build", "dist", "out", "resources", "assets"],
   },
 );
-
-export default config;
