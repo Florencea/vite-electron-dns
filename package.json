@@ -39,7 +39,7 @@
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.1",
+    "typescript-eslint": "^8.46.2",
     "vite": "^7.1.10"
   },
   "engines": {
