@@ -27,7 +27,7 @@
     "autoprefixer": "^10.4.22",
     "dotenv": "^17.2.3",
     "electron": "^39.2.5",
-    "electron-builder": "^26.3.3",
+    "electron-builder": "^26.3.4",
     "electron-store": "^11.0.2",
     "electron-vite": "^4.0.1",
     "eslint": "^9.39.1",
