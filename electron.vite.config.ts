@@ -1,6 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import { defineConfig } from "electron-vite";
 import { rmSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -10,11 +10,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export default defineConfig({
-  main: {
-    plugins: [externalizeDepsPlugin()],
-  },
+  main: {},
   preload: {
-    plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
         output: {
