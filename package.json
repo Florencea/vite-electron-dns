@@ -2,7 +2,7 @@
   "name": "vite-electron-dns",
   "type": "module",
   "version": "1.0.0",
-  "description": "A DNS/DoH tool created by Electron Forge and Vite",
+  "description": "A DNS/DoH tool",
   "main": "./out/main/index.js",
   "author": "Florencea Bear",
   "homepage": "https://github.com/Florencea/vite-electron-dns",
@@ -11,10 +11,10 @@
     "dev": "electron-vite dev -w",
     "lint": "eslint . && tsc --noEmit -p tsconfig.node.json --composite false && tsc --noEmit -p tsconfig.web.json --composite false",
     "format": "prettier \"**/*\" --write --ignore-unknown --cache",
-    "build": "npm run lint && electron-vite build",
-    "build:win": "npm run build && electron-builder --config electron-builder-config.ts --win --x64 --arm64",
-    "build:mac": "npm run build && electron-builder --config electron-builder-config.ts --mac",
-    "build:linux": "npm run build && electron-builder --config electron-builder-config.ts --linux"
+    "build": "pnpm lint && electron-vite build",
+    "build:win": "pnpm build && electron-builder --config electron-builder-config.ts --win --x64 --arm64",
+    "build:mac": "pnpm build && electron-builder --config electron-builder-config.ts --mac",
+    "build:linux": "pnpm build && electron-builder --config electron-builder-config.ts --linux"
   },
   "devDependencies": {
     "@adobe/react-spectrum": "^3.46.2",
@@ -25,7 +25,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.2.0",
     "autoprefixer": "^10.4.27",
-    "dotenv": "^17.3.1",
+    "dotenv": "^17.4.0",
     "electron": "^41.1.1",
     "electron-builder": "^26.8.2",
     "electron-store": "^11.0.2",
@@ -41,8 +41,5 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.0",
     "vite": "^7.3.1"
-  },
-  "engines": {
-    "node": "24.14.1"
   }
 }
