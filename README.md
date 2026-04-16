@@ -26,8 +26,10 @@ The UI and state management are powered by **React Spectrum**, **Tailwind CSS**,
 
 ### Prerequisites
 
-- **Node.js** (v18+ recommended)
-- **PNPM** (Used as the package manager)
+- **Node.js** (v24.15.0)
+- **PNPM** (v10.33.0)
+
+_Note: This project enforces strict engine versions via `.npmrc` to ensure development environment consistency._
 
 ### Installation & Setup
 

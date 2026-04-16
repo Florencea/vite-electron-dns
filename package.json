@@ -2,7 +2,16 @@
   "name": "vite-electron-dns",
   "type": "module",
   "version": "1.0.0",
-  "description": "A DNS/DoH tool",
+  "description": "An Electron application for DNS and DNS-over-HTTPS (DoH) management, built with Vite and React.",
+  "keywords": [
+    "electron",
+    "vite",
+    "react",
+    "dns",
+    "doh",
+    "dns-over-https",
+    "typescript"
+  ],
   "main": "./out/main/index.js",
   "author": "Florencea Bear",
   "homepage": "https://github.com/Florencea/vite-electron-dns",
