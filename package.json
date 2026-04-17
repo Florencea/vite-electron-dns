@@ -17,13 +17,13 @@
   "homepage": "https://github.com/Florencea/vite-electron-dns",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "dev": "electron-vite dev -w",
-    "lint": "eslint . && tsc --noEmit -p tsconfig.node.json --composite false && tsc --noEmit -p tsconfig.web.json --composite false",
-    "format": "prettier \"**/*\" --write --ignore-unknown --cache",
+    "dev": "electron-vite dev",
+    "lint": "eslint . && tsc -b tsconfig.node.json tsconfig.web.json",
+    "format": "prettier . --write --cache",
     "build": "pnpm lint && electron-vite build",
-    "build:win": "pnpm build && electron-builder --config electron-builder-config.ts --win --x64 --arm64",
-    "build:mac": "pnpm build && electron-builder --config electron-builder-config.ts --mac",
-    "build:linux": "pnpm build && electron-builder --config electron-builder-config.ts --linux"
+    "build:win": "pnpm build && electron-builder -c electron-builder-config.ts --win --x64 --arm64",
+    "build:mac": "pnpm build && electron-builder -c electron-builder-config.ts --mac",
+    "build:linux": "pnpm build && electron-builder -c electron-builder-config.ts --linux"
   },
   "devDependencies": {
     "@adobe/react-spectrum": "3.47.0",
@@ -33,7 +33,6 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.2.0",
-    "autoprefixer": "10.5.0",
     "dotenv": "17.4.2",
     "electron": "41.2.1",
     "electron-builder": "26.9.0",
@@ -42,7 +41,6 @@
     "eslint": "10.2.0",
     "eslint-plugin-react-hooks": "7.1.0",
     "globals": "17.5.0",
-    "postcss": "8.5.10",
     "prettier": "3.8.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
@@ -50,16 +48,6 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.58.2",
     "vite": "7.3.2"
-  },
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "onFail": "error"
-    },
-    "packageManager": {
-      "name": "pnpm",
-      "onFail": "error"
-    }
   },
   "engines": {
     "node": "24.15.0",
