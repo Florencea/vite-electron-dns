@@ -24,7 +24,7 @@ import {
 } from "@adobe/react-spectrum";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import type { ModeT } from "src/preload/index.d";
+import type { ModeT } from "../../shared/types";
 
 export const App = () => {
   const [mode, setMode] = useState<ModeT>("dns");

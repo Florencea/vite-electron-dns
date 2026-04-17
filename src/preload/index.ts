@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { ModeT, ServerT } from "./index.d";
+import type { ModeT, ServerT } from "../shared/types";
 
 const SERVERS: ServerT[] = [
   {
