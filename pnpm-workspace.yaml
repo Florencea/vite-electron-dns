@@ -1,7 +1,0 @@
-allowBuilds:
-  electron: true
-  electron-winstaller: false
-  esbuild: false
-engineStrict: true
-savePrefix: ''
-strictDepBuilds: true

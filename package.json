@@ -1,6 +1,5 @@
 {
   "name": "vite-electron-dns",
-  "type": "module",
   "version": "1.0.0",
   "description": "An Electron application for DNS and DNS-over-HTTPS (DoH) management, built with Vite and React.",
   "keywords": [
@@ -12,18 +11,22 @@
     "dns-over-https",
     "typescript"
   ],
-  "main": "./out/main/index.js",
-  "author": "Florencea Bear",
   "homepage": "https://github.com/Florencea/vite-electron-dns",
+  "author": "Florencea Bear",
+  "type": "module",
+  "main": "./out/main/index.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "build": "npm run typecheck && npm run lint && electron-vite build",
+    "build:linux": "npm run build && electron-builder -c electron-builder-config.ts --linux",
+    "build:mac": "npm run build && electron-builder -c electron-builder-config.ts --mac",
+    "build:win": "npm run build && electron-builder -c electron-builder-config.ts --win --x64 --arm64",
     "dev": "electron-vite dev",
-    "lint": "eslint . && tsc -b tsconfig.node.json tsconfig.web.json",
     "format": "prettier . --write --cache",
-    "build": "pnpm lint && electron-vite build",
-    "build:win": "pnpm build && electron-builder -c electron-builder-config.ts --win --x64 --arm64",
-    "build:mac": "pnpm build && electron-builder -c electron-builder-config.ts --mac",
-    "build:linux": "pnpm build && electron-builder -c electron-builder-config.ts --linux"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "rebuild:trusted": "npm rebuild electron --ignore-scripts=false && electron-builder install-app-deps",
+    "setup": "npm ci && node --run rebuild:trusted",
+    "typecheck": "tsc -b tsconfig.node.json tsconfig.web.json"
   },
   "devDependencies": {
     "@adobe/react-spectrum": "3.47.0",
@@ -42,6 +45,8 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.5.0",
     "prettier": "3.8.3",
+    "prettier-plugin-packagejson": "3.0.2",
+    "prettier-plugin-tailwindcss": "0.7.2",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "tailwindcss": "4.2.2",
@@ -50,7 +55,6 @@
     "vite": "7.3.2"
   },
   "engines": {
-    "node": "24.15.0",
-    "pnpm": "10.33.0"
+    "node": "24.15.0"
   }
 }
