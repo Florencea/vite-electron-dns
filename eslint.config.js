@@ -14,7 +14,6 @@ export default defineConfig(
       reactHooks.configs.flat.recommended,
     ],
     languageOptions: {
-      ecmaVersion: 2022,
       globals: globals.browser,
     },
   },
