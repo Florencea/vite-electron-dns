@@ -15,17 +15,23 @@ The UI and state management are powered by **React Spectrum**, **Tailwind CSS**,
 1.  **Install dependencies:**
 
     ```sh
+    npm ci
+    ```
+
+2.  **Setup Electron**
+
+    ```sh
     npm run setup
     ```
 
-2.  **Configure Environment Variables:**
+3.  **Configure Environment Variables:**
     Copy `.env.example` to a new file named `.env` and customize the variables.
 
     ```sh
     cp .env.example .env
     ```
 
-3.  **Run in development mode:**
+4.  **Run in development mode:**
     ```sh
     npm run dev
     ```

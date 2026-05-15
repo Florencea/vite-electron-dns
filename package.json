@@ -24,8 +24,7 @@
     "format": "prettier . --write --cache",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "rebuild:trusted": "npm rebuild electron --ignore-scripts=false && electron-builder install-app-deps",
-    "setup": "npm ci && node --run rebuild:trusted",
+    "setup": "install-electron && electron-builder install-app-deps",
     "typecheck": "tsc -b tsconfig.node.json tsconfig.web.json"
   },
   "devDependencies": {
