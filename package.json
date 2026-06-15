@@ -30,7 +30,7 @@
   "devDependencies": {
     "@adobe/react-spectrum": "3.47.1",
     "@eslint/js": "10.0.1",
-    "@tailwindcss/vite": "4.3.0",
+    "@tailwindcss/vite": "4.3.1",
     "@tanstack/react-query": "5.101.0",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
