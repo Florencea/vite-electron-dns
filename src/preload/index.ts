@@ -107,9 +107,6 @@ const api = {
 
 try {
   contextBridge.exposeInMainWorld("api", api);
-  // for process.env.CHROMATIC code in react spectrum
-  const fakeProcess = { env: { CHROMATIC: false } };
-  contextBridge.exposeInMainWorld("process", fakeProcess);
 } catch (error) {
   console.error(error);
 }
