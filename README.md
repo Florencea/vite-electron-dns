@@ -40,13 +40,17 @@ The UI and state management are powered by **React Spectrum**, **Tailwind CSS**,
 
 - `npm run dev`: Start the development server.
 - `npm run build`: Type-check, lint, and build the application for production.
-- `npm run build:win`: Package for Windows.
+- `npm run build:win`: Package for Windows (Both x86/64 and arm).
 - `npm run build:mac`: Package for macOS.
 - `npm run build:linux`: Package for Linux.
 - `npm run lint`: Lint code with ESLint.
 - `npm run lint:fix`: Automatically fix linting issues.
 - `npm run format`: Format code with Prettier.
 - `npm run typecheck`: Check for type errors with TypeScript.
+
+## Note
+
+- To run `npm run build:win` on macOS ARM (Apple Silicon), Rosetta 2 is required.
 
 ## License
 
