@@ -15,7 +15,9 @@ const config = {
     "!{.env,.env.*,.npmrc,pnpm-lock.yaml}",
     "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}",
   ],
-  asarUnpack: ["resources/**"],
+  asar: {
+    unpack: ["resources/**"],
+  },
   win: {
     executableName: `${process.env.VITE_TITLE}`,
   },
@@ -29,7 +31,9 @@ const config = {
   },
   mac: {
     target: "dmg",
-    entitlementsInherit: "build/entitlements.mac.plist",
+    sign: {
+      entitlementsInherit: "build/entitlements.mac.plist",
+    },
     extendInfo: [
       {
         NSCameraUsageDescription: "Application requests access to the device's camera.",
@@ -59,7 +63,9 @@ const config = {
   appImage: {
     artifactName: "${productName}.${ext}",
   },
-  npmRebuild: false,
+  nativeModules: {
+    npmRebuild: false,
+  },
   //   publish: {
   //     provider: "generic",
   //     url: "https://example.com/auto-updates",
