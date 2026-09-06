@@ -1,55 +1,28 @@
-import {
-  BrowserWindow,
-  Menu,
-  app,
-  ipcMain,
-  screen,
-  shell,
-  type IpcMainInvokeEvent,
-} from "electron";
+import { BrowserWindow, Menu, app, ipcMain, shell, type IpcMainInvokeEvent } from "electron";
 import { Resolver } from "node:dns/promises";
 import { isIPv4, isIPv6 } from "node:net";
 import { URL, fileURLToPath } from "node:url";
 import icon from "../../resources/icon.png?asset";
 import { menu } from "./menu";
-import { store } from "./store";
 
 const createWindow = () => {
   const isDev = !app.isPackaged;
-
-  const savedBounds = store.getBounds();
-  const screenArea = screen.getDisplayMatching(savedBounds).workArea;
-  const isWindowNotFitScreen =
-    savedBounds.x > screenArea.x + screenArea.width ||
-    savedBounds.x < screenArea.x ||
-    savedBounds.y < screenArea.y ||
-    savedBounds.y > screenArea.y + screenArea.height;
 
   const indexUrl = process.env.ELECTRON_RENDERER_URL!;
   const indexFile = new URL("../renderer/index.html", import.meta.url).toString();
   const preloadFile = fileURLToPath(new URL("../preload/index.js", import.meta.url));
 
   const mainWindow = new BrowserWindow({
-    width: savedBounds.width,
-    height: savedBounds.height,
+    name: "main-window",
+    width: 800,
+    height: 600,
     minWidth: 720,
     minHeight: 320,
+    windowStatePersistence: true,
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: { preload: preloadFile },
     title: import.meta.env.VITE_TITLE,
-  });
-
-  mainWindow.setBounds(isWindowNotFitScreen ? store.DEFAULT_BOUNDS : savedBounds);
-
-  mainWindow.on("move", () => {
-    const bounds = mainWindow.getBounds();
-    store.setBounds(bounds);
-  });
-
-  mainWindow.on("resize", () => {
-    const bounds = mainWindow.getBounds();
-    store.setBounds(bounds);
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
