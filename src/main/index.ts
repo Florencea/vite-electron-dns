@@ -26,13 +26,8 @@ const createWindow = () => {
     savedBounds.y > screenArea.y + screenArea.height;
 
   const indexUrl = process.env.ELECTRON_RENDERER_URL!;
-  const indexFile = new URL(
-    "../renderer/index.html",
-    import.meta.url,
-  ).toString();
-  const preloadFile = fileURLToPath(
-    new URL("../preload/index.js", import.meta.url),
-  );
+  const indexFile = new URL("../renderer/index.html", import.meta.url).toString();
+  const preloadFile = fileURLToPath(new URL("../preload/index.js", import.meta.url));
 
   const mainWindow = new BrowserWindow({
     width: savedBounds.width,
@@ -45,9 +40,7 @@ const createWindow = () => {
     title: import.meta.env.VITE_TITLE,
   });
 
-  mainWindow.setBounds(
-    isWindowNotFitScreen ? store.DEFAULT_BOUNDS : savedBounds,
-  );
+  mainWindow.setBounds(isWindowNotFitScreen ? store.DEFAULT_BOUNDS : savedBounds);
 
   mainWindow.on("move", () => {
     const bounds = mainWindow.getBounds();
@@ -60,18 +53,18 @@ const createWindow = () => {
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    void shell.openExternal(url);
     return { action: "deny" };
   });
 
-  mainWindow.loadURL(isDev ? indexUrl : indexFile);
+  void mainWindow.loadURL(isDev ? indexUrl : indexFile);
   // mainWindow.webContents.openDevTools();
 };
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
-  app.whenReady().then(() => {
+  void app.whenReady().then(() => {
     app.setAppUserModelId(import.meta.env.VITE_APPID);
 
     createWindow();
@@ -169,9 +162,7 @@ const fetchHost = (
   servers: { title: string; server: string; ip: string }[],
 ) =>
   name
-    ? Promise.all(
-        servers.map(({ server, ip }) => fetchDns({ server, name, type, ip })),
-      )
+    ? Promise.all(servers.map(({ server, ip }) => fetchDns({ server, name, type, ip })))
     : Promise.resolve([]);
 
 const resolveHost = (
@@ -181,9 +172,7 @@ const resolveHost = (
   servers: { title: string; server: string; ip: string }[],
 ) =>
   name
-    ? Promise.all(
-        servers.map(({ server, ip }) => resolveDns({ server, name, type, ip })),
-      )
+    ? Promise.all(servers.map(({ server, ip }) => resolveDns({ server, name, type, ip })))
     : Promise.resolve([]);
 
 ipcMain.handle("doh", fetchHost);

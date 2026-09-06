@@ -18,7 +18,7 @@ The UI and state management are powered by **React Spectrum**, **Tailwind CSS**,
     npm ci
     ```
 
-2.  **Setup Electron**
+2.  **Setup Electron:**
 
     ```sh
     npm run setup
@@ -38,14 +38,15 @@ The UI and state management are powered by **React Spectrum**, **Tailwind CSS**,
 
 ## Available Scripts
 
+- `npm run setup`: Download Electron binaries and install native dependencies.
 - `npm run dev`: Start the development server.
-- `npm run build`: Type-check, lint, and build the application for production.
-- `npm run build:win`: Package for Windows (Both x86/64 and arm).
+- `npm run build`: Build the application for production with electron-vite.
+- `npm run build:win`: Package for Windows (x64 and arm64).
 - `npm run build:mac`: Package for macOS.
 - `npm run build:linux`: Package for Linux.
-- `npm run lint`: Lint code with ESLint.
-- `npm run lint:fix`: Automatically fix linting issues.
-- `npm run format`: Format code with Prettier.
+- `npm run lint`: Lint code with oxlint.
+- `npm run lint:fix`: Automatically fix linting issues with oxlint.
+- `npm run format`: Format code with oxfmt.
 - `npm run typecheck`: Check for type errors with TypeScript.
 
 ## Note

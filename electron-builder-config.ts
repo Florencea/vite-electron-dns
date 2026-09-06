@@ -32,12 +32,10 @@ const config = {
     entitlementsInherit: "build/entitlements.mac.plist",
     extendInfo: [
       {
-        NSCameraUsageDescription:
-          "Application requests access to the device's camera.",
+        NSCameraUsageDescription: "Application requests access to the device's camera.",
       },
       {
-        NSMicrophoneUsageDescription:
-          "Application requests access to the device's microphone.",
+        NSMicrophoneUsageDescription: "Application requests access to the device's microphone.",
       },
       {
         NSDocumentsFolderUsageDescription:
