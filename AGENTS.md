@@ -94,5 +94,6 @@ Runs:
 4. `check:deadcode` (Knip dead-code audit)
 5. `test` (Vitest dual-track tests: Chromium browser + Node tests)
 6. `build` (Native Vite multi-target build: main, preload, renderer)
+7. `pack` (Electron-builder unpacked directory packaging validation)
 
 All checks must pass with 0 errors and 0 warnings.

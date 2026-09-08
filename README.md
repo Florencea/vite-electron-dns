@@ -75,7 +75,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | Command                  | Description                                                       |
 | :----------------------- | :---------------------------------------------------------------- |
 | `npm run dev`            | Start the development server with Vite HMR via native Node runner |
-| `npm run check`          | Run the unified 6-step verification gate                          |
+| `npm run check`          | Run the unified 7-step verification gate                          |
 | `npm run test`           | Run all Vitest tests (Chromium browser + Node)                    |
 | `npm run test:renderer`  | Run renderer component tests in headless Chromium                 |
 | `npm run test:main`      | Run main process, DNS resolver, and type contract tests           |
@@ -87,6 +87,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | `npm run format:check`   | Check code formatting with Prettier                               |
 | `npm run check:deadcode` | Detect dead code and unused exports with Knip                     |
 | `npm run build`          | Build all targets (main, preload, renderer) with Native Vite      |
+| `npm run pack`           | Validate Electron packaging by generating unpacked directory      |
 | `npm run build:main`     | Bundle Electron main process with Native Vite SSR                 |
 | `npm run build:preload`  | Bundle Electron preload script into CommonJS                      |
 | `npm run build:renderer` | Build React client application with Native Vite                   |
