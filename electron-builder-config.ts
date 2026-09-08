@@ -23,7 +23,7 @@ const config = {
     artifactName: "${productName}.${ext}",
   },
   linux: {
-    target: ["AppImage", "snap", "deb"],
+    target: ["AppImage", "deb"],
     maintainer: "Florencea Bear",
     category: "Utility",
   },

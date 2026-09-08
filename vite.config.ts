@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
     base: "./",
     build: {
       outDir: "dist/renderer",
+      chunkSizeWarningLimit: 1000,
     },
     plugins: [react(), tailwindcss()],
   };

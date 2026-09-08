@@ -83,3 +83,21 @@ jobs:
 
       - name: Run tests
         run: npm run test
+
+      - name: Install Rosetta 2
+        if: runner.os == 'macOS'
+        run: sudo softwareupdate --install-rosetta --agree-to-license || true
+
+      - name: Try package (Linux)
+        if: runner.os == 'Linux'
+        run: npm run build:linux
+
+      - name: Try package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          npm run build:mac
+          npm run build:win
+
+      - name: Try package (Windows)
+        if: runner.os == 'Windows'
+        run: npm run build:win
