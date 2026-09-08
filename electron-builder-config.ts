@@ -31,6 +31,7 @@ const config = {
     artifactName: "${productName}.${ext}",
   },
   npmRebuild: false,
+  publish: null,
 } satisfies Configuration;
 
 export default config;

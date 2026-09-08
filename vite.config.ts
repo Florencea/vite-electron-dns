@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     base: "./",
+    server: {
+      watch: {
+        ignored: ["**/src/main/**", "**/src/preload/**"],
+      },
+    },
     build: {
       outDir: "dist/renderer",
       chunkSizeWarningLimit: 1000,
