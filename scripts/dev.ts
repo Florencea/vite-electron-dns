@@ -74,12 +74,17 @@ async function cleanExit(code = 0): Promise<never> {
     electronProcess.kill();
     electronProcess = null;
   }
-  await Promise.all([
-    mainWatcher.close(),
-    preloadWatcher.close(),
-    server.close(),
-  ]);
-  process.exit(code);
+  try {
+    await Promise.all([
+      mainWatcher.close(),
+      preloadWatcher.close(),
+      server.close(),
+    ]);
+  } catch {
+    // Ignore cleanup errors on exit
+  } finally {
+    process.exit(code);
+  }
 }
 
 function startElectron() {

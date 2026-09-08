@@ -49,6 +49,10 @@ if (!app.requestSingleInstanceLock()) {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
   });
+
+  app.on("window-all-closed", () => {
+    app.quit();
+  });
 }
 
 Menu.setApplicationMenu(menu);
