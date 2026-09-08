@@ -1,12 +1,5 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "eslint.enable": true,
   "js/ts.experimental.useTsgo": true,
   "js/ts.preferences.preferTypeOnlyAutoImports": true,
-  "js/ts.tsdk.path": "./node_modules/typescript",
-  "prettier.enable": true
+  "js/ts.tsdk.path": "./node_modules/typescript"
 }
