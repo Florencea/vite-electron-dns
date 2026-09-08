@@ -13,7 +13,7 @@ Guidelines for AI agents and developers working on this repository.
   - Type definitions reside in `src/preload/index.d.ts`.
   - **Security**: Never expose raw Node.js modules or raw `ipcRenderer` directly to the renderer. Context isolation is mandatory.
 - **Renderer (`src/renderer/`)**:
-  - React 19 single-page UI built with Adobe React Spectrum and TailwindCSS v4.
+  - React single-page UI built with Adobe React Spectrum and Tailwind CSS.
   - Root `index.html` mounts `/src/renderer/main.tsx`.
   - Queries and mutations are managed through `@tanstack/react-query`.
   - All communication with the main process must pass through typed `window.api`.
@@ -21,11 +21,11 @@ Guidelines for AI agents and developers working on this repository.
   - Cross-process interfaces in `src/shared/types.ts` (`ModeT`, `ServerT`).
   - Single Source of Truth for DNS server presets in `src/shared/servers.ts`.
 - **Build & Development Architecture**:
-  - Native Vite 8 powered by Rolldown (zero third-party Electron wrapper frameworks).
+  - Native Vite powered by Rolldown (zero third-party Electron wrapper frameworks).
   - Multi-target build: `build:main` (Node SSR), `build:preload` (Node SSR), `build:renderer` (Client SPA).
-  - Native TypeScript development runner in `scripts/dev.ts` executed directly by Node 24.
+  - Native TypeScript development runner in `scripts/dev.ts` executed directly by Node.
 - **Packaging & Release**:
-  - `electron-builder` stable release (`26.16.1`) packages installable artifacts into `release/`.
+  - `electron-builder` packages installable artifacts into `release/`.
   - Payload explicitly whitelists `dist/**/*` and `build/icon.png`.
 - **Language & Documentation**:
   - Keep code comments and commit messages in concise English.

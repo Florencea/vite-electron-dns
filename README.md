@@ -3,7 +3,7 @@
 [![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron 44**, **Native Vite 8**, **React 19**, **Adobe React Spectrum**, **Tailwind CSS v4**, and **TanStack Query**.
+A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron**, **Native Vite**, **React**, **Adobe React Spectrum**, **Tailwind CSS**, and **TanStack Query**.
 
 Designed for deterministic DNS evaluation across preset and custom resolvers, featuring native multi-target builds, sub-second HMR with automated process hot-restart, and zero third-party Electron wrapper meta-frameworks.
 
@@ -11,8 +11,8 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Highlights
 
-- **Strict Quality Gate**: Unified verification command (`npm run check`) executing strict TypeScript, ESLint 10, Prettier 3, Knip dead-code audit, dual-track testing, and Native Vite 8 production build.
-- **Native Vite 8 & Rolldown**: Built directly with standard Vite 8 (zero third-party Electron wrapper meta-frameworks) for sub-second builds across main, preload, and renderer.
+- **Strict Quality Gate**: Unified verification command (`npm run check`) executing strict TypeScript, ESLint, Prettier, Knip dead-code audit, dual-track testing, and Native Vite production build.
+- **Native Vite & Rolldown**: Built directly with standard Vite (zero third-party Electron wrapper meta-frameworks) for sub-second builds across main, preload, and renderer.
 - **Hot-Restart & Dev Runner**: Native TypeScript runner (`scripts/dev.ts`) providing true process hot-restart on main process changes, window reload on preload edits, and component-level HMR for renderer.
 - **Dual-Track Testing**: Component tests execute in headless Chromium browser mode via `@vitest/browser-playwright`, while main process, DNS resolver, and type contract tests run in Node.js.
 - **Agent-First Workflow**: Clear architectural boundaries, strict coding rules, and TDD workflow documented in [AGENTS.md](AGENTS.md).
@@ -22,15 +22,15 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Tech Stack
 
-| Layer                | Technology                                              |
-| :------------------- | :------------------------------------------------------ |
-| **Runtime & Shell**  | Electron 44 (Context Isolation, Safe IPC Bridge)        |
-| **Frontend UI**      | React 19, Adobe React Spectrum, Tailwind CSS v4         |
-| **State & Fetching** | TanStack Query v5                                       |
-| **Build & Dev**      | Native Vite 8, Rolldown, Native Node 24 Dev Runner      |
-| **Testing**          | Vitest 5 (Chromium Browser Mode + Node Backend Tests)   |
-| **Packaging**        | electron-builder 26 (Cross-compilation, DMG, NSIS, Deb) |
-| **Code Quality**     | TypeScript (strict), ESLint 10, Prettier 3, Knip        |
+| Layer                | Technology                                           |
+| :------------------- | :--------------------------------------------------- |
+| **Runtime & Shell**  | Electron (Context Isolation, Safe IPC Bridge)        |
+| **Frontend UI**      | React, Adobe React Spectrum, Tailwind CSS            |
+| **State & Fetching** | TanStack Query                                       |
+| **Build & Dev**      | Native Vite, Rolldown, Native Node Dev Runner        |
+| **Testing**          | Vitest (Chromium Browser Mode + Node Backend Tests)  |
+| **Packaging**        | electron-builder (Cross-compilation, DMG, NSIS, Deb) |
+| **Code Quality**     | TypeScript (strict), ESLint, Prettier, Knip          |
 
 ---
 
@@ -38,7 +38,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ### Prerequisites
 
-- **Node.js** - The required version is specified in `package.json` under the `engines` field (`24.20.0`).
+- **Node.js** - The required version is specified in `package.json` under the `engines` field.
 
 ### Setup
 
@@ -72,28 +72,28 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Available Scripts
 
-| Command                  | Description                                                          |
-| :----------------------- | :------------------------------------------------------------------- |
-| `npm run dev`            | Start the development server with Vite HMR via Node 24 native runner |
-| `npm run check`          | Run the unified 6-step verification gate                             |
-| `npm run test`           | Run all Vitest tests (Chromium browser + Node)                       |
-| `npm run test:renderer`  | Run renderer component tests in headless Chromium                    |
-| `npm run test:main`      | Run main process, DNS resolver, and type contract tests              |
-| `npm run test:setup`     | Install Playwright Chromium binary                                   |
-| `npm run typecheck`      | Check for type errors with TypeScript in strict mode                 |
-| `npm run lint`           | Lint code with ESLint                                                |
-| `npm run lint:fix`       | Automatically fix linting issues with ESLint                         |
-| `npm run format`         | Format code with Prettier                                            |
-| `npm run format:check`   | Check code formatting with Prettier                                  |
-| `npm run check:deadcode` | Detect dead code and unused exports with Knip                        |
-| `npm run build`          | Build all targets (main, preload, renderer) with Native Vite 8       |
-| `npm run build:main`     | Bundle Electron main process with Native Vite SSR                    |
-| `npm run build:preload`  | Bundle Electron preload script into CommonJS                         |
-| `npm run build:renderer` | Build React client application with Native Vite                      |
-| `npm run build:mac`      | Package macOS application into `release/`                            |
-| `npm run build:win`      | Package Windows application into `release/`                          |
-| `npm run build:linux`    | Package Linux application into `release/`                            |
-| `npm run setup`          | Download Electron binaries and install native dependencies           |
+| Command                  | Description                                                       |
+| :----------------------- | :---------------------------------------------------------------- |
+| `npm run dev`            | Start the development server with Vite HMR via native Node runner |
+| `npm run check`          | Run the unified 6-step verification gate                          |
+| `npm run test`           | Run all Vitest tests (Chromium browser + Node)                    |
+| `npm run test:renderer`  | Run renderer component tests in headless Chromium                 |
+| `npm run test:main`      | Run main process, DNS resolver, and type contract tests           |
+| `npm run test:setup`     | Install Playwright Chromium binary                                |
+| `npm run typecheck`      | Check for type errors with TypeScript in strict mode              |
+| `npm run lint`           | Lint code with ESLint                                             |
+| `npm run lint:fix`       | Automatically fix linting issues with ESLint                      |
+| `npm run format`         | Format code with Prettier                                         |
+| `npm run format:check`   | Check code formatting with Prettier                               |
+| `npm run check:deadcode` | Detect dead code and unused exports with Knip                     |
+| `npm run build`          | Build all targets (main, preload, renderer) with Native Vite      |
+| `npm run build:main`     | Bundle Electron main process with Native Vite SSR                 |
+| `npm run build:preload`  | Bundle Electron preload script into CommonJS                      |
+| `npm run build:renderer` | Build React client application with Native Vite                   |
+| `npm run build:mac`      | Package macOS application into `release/`                         |
+| `npm run build:win`      | Package Windows application into `release/`                       |
+| `npm run build:linux`    | Package Linux application into `release/`                         |
+| `npm run setup`          | Download Electron binaries and install native dependencies        |
 
 ---
 

@@ -1,21 +1,8 @@
 {
   "name": "vite-electron-dns",
   "version": "1.0.0",
-  "description": "High-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application built with Electron 44, Native Vite 8, React 19, Adobe React Spectrum, and Tailwind CSS v4.",
-  "keywords": [
-    "adobe-react-spectrum",
-    "dns",
-    "dns-over-https",
-    "doh",
-    "electron",
-    "react",
-    "react19",
-    "tailwindcss",
-    "tanstack-query",
-    "typescript",
-    "vite"
-  ],
-  "homepage": "https://github.com/Florencea/vite-electron-dns",
+  "private": true,
+  "description": "DNS and DoH benchmarking tool",
   "author": "Florencea Bear",
   "type": "module",
   "main": "./dist/main/index.js",
