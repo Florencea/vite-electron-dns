@@ -1,4 +1,5 @@
-import { Menu, app, type MenuItemConstructorOptions } from "electron";
+import electron, { type MenuItemConstructorOptions } from "electron";
+const { Menu, app } = electron;
 
 const isDev = !app.isPackaged;
 
@@ -6,7 +7,7 @@ const isMac = process.platform === "darwin";
 
 const appName = import.meta.env.VITE_TITLE;
 
-const menuMac: Array<MenuItemConstructorOptions> = [
+const menuMac: MenuItemConstructorOptions[] = [
   {
     role: "appMenu",
     label: appName,
@@ -72,7 +73,7 @@ const menuMac: Array<MenuItemConstructorOptions> = [
   },
 ];
 
-const menuWindows: Array<MenuItemConstructorOptions> = [
+const menuWindows: MenuItemConstructorOptions[] = [
   {
     role: "fileMenu",
     label: "檔案",

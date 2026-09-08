@@ -2,29 +2,35 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "composite": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
+    "target": "es2023",
+    "lib": ["ES2023"],
     "module": "esnext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
     "moduleResolution": "bundler",
-    "noImplicitReturns": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "composite": true,
+
+    /* Linting */
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "target": "esnext",
-    "types": ["electron-vite/node"],
-    "verbatimModuleSyntax": true
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "electron.vite.config.*",
+    "*.config.ts",
+    "electron-builder-config.ts",
+    "scripts/**/*",
     "src/main/**/*",
     "src/preload/**/*",
-    "src/renderer/src/env.d.ts",
-    "src/shared/**/*"
+    "src/shared/**/*",
+    "src/vite-env.d.ts",
+    "test/main/**/*",
+    "test/canary/**/*"
   ]
 }

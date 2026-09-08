@@ -1,0 +1,6 @@
+build
+dist
+release
+.vitest
+node_modules
+package-lock.json

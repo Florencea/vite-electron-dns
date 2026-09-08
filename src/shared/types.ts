@@ -7,3 +7,9 @@ export interface ServerT {
   server: string;
   ip: string;
 }
+
+export interface WindowApi {
+  servers: ServerT[];
+  queryIpv4: (mode: ModeT, name: string) => Promise<string[]>;
+  queryIpv6: (mode: ModeT, name: string) => Promise<string[]>;
+}

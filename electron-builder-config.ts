@@ -1,55 +1,22 @@
 import "dotenv/config";
-import { type Configuration } from "electron-builder";
+import type { Configuration } from "electron-builder";
 
 const config = {
-  appId: `${process.env.VITE_APPID}`,
-  productName: `${process.env.VITE_TITLE}`,
+  appId: process.env.VITE_APPID ?? "",
+  productName: process.env.VITE_TITLE ?? "",
   directories: {
-    buildResources: "build",
+    output: "release",
   },
-  files: [
-    "!**/.vscode/*",
-    "!src/*",
-    "!electron.vite.config.{js,ts,mjs,cjs}",
-    "!{.eslintignore,.eslintrc.cjs,eslint.config.js,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}",
-    "!{.env,.env.*,.npmrc,pnpm-lock.yaml}",
-    "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}",
-  ],
-  asar: {
-    unpack: ["resources/**"],
-  },
-  win: {
-    executableName: `${process.env.VITE_TITLE}`,
-  },
+  files: ["dist/**/*", "build/icon.png"],
   nsis: {
     artifactName: "Install ${productName}.${ext}",
-    shortcutName: "${productName}",
-    uninstallDisplayName: "${productName}",
     createDesktopShortcut: "always",
     runAfterFinish: true,
     deleteAppDataOnUninstall: true,
   },
   mac: {
     target: "dmg",
-    sign: {
-      entitlementsInherit: "build/entitlements.mac.plist",
-    },
-    extendInfo: [
-      {
-        NSCameraUsageDescription: "Application requests access to the device's camera.",
-      },
-      {
-        NSMicrophoneUsageDescription: "Application requests access to the device's microphone.",
-      },
-      {
-        NSDocumentsFolderUsageDescription:
-          "Application requests access to the user's Documents folder.",
-      },
-      {
-        NSDownloadsFolderUsageDescription:
-          "Application requests access to the user's Downloads folder.",
-      },
-    ],
+    entitlementsInherit: "build/entitlements.mac.plist",
     notarize: false,
   },
   dmg: {
@@ -63,13 +30,7 @@ const config = {
   appImage: {
     artifactName: "${productName}.${ext}",
   },
-  nativeModules: {
-    npmRebuild: false,
-  },
-  //   publish: {
-  //     provider: "generic",
-  //     url: "https://example.com/auto-updates",
-  //   },
+  npmRebuild: false,
 } satisfies Configuration;
 
 export default config;
