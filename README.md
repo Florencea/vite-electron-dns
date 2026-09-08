@@ -3,9 +3,9 @@
 [![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A robust DNS/DoH (DNS over HTTPS) tool built with Electron, React, and Vite. This tool allows you to test and evaluate specific domain names resolved across multiple DNS servers.
+A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron 44**, **Native Vite 8**, **React 19**, **Adobe React Spectrum**, **Tailwind CSS v4**, and **TanStack Query**.
 
-The UI and state management are powered by **Adobe React Spectrum**, **Tailwind CSS v4**, and **TanStack Query**.
+Designed for deterministic DNS evaluation across preset and custom resolvers, featuring native multi-target builds, sub-second HMR with automated process hot-restart, and zero third-party Electron wrapper meta-frameworks.
 
 ---
 
@@ -13,9 +13,24 @@ The UI and state management are powered by **Adobe React Spectrum**, **Tailwind 
 
 - **Strict Quality Gate**: Unified verification command (`npm run check`) executing strict TypeScript, ESLint 10, Prettier 3, Knip dead-code audit, dual-track testing, and Native Vite 8 production build.
 - **Native Vite 8 & Rolldown**: Built directly with standard Vite 8 (zero third-party Electron wrapper meta-frameworks) for sub-second builds across main, preload, and renderer.
+- **Hot-Restart & Dev Runner**: Native TypeScript runner (`scripts/dev.ts`) providing true process hot-restart on main process changes, window reload on preload edits, and component-level HMR for renderer.
 - **Dual-Track Testing**: Component tests execute in headless Chromium browser mode via `@vitest/browser-playwright`, while main process, DNS resolver, and type contract tests run in Node.js.
 - **Agent-First Workflow**: Clear architectural boundaries, strict coding rules, and TDD workflow documented in [AGENTS.md](AGENTS.md).
 - **Process Isolation & Security**: Safe context bridge exposition ensuring raw Node.js internals and IPC channels remain isolated from the renderer.
+
+---
+
+## Tech Stack
+
+| Layer                | Technology                                              |
+| :------------------- | :------------------------------------------------------ |
+| **Runtime & Shell**  | Electron 44 (Context Isolation, Safe IPC Bridge)        |
+| **Frontend UI**      | React 19, Adobe React Spectrum, Tailwind CSS v4         |
+| **State & Fetching** | TanStack Query v5                                       |
+| **Build & Dev**      | Native Vite 8, Rolldown, Native Node 24 Dev Runner      |
+| **Testing**          | Vitest 5 (Chromium Browser Mode + Node Backend Tests)   |
+| **Packaging**        | electron-builder 26 (Cross-compilation, DMG, NSIS, Deb) |
+| **Code Quality**     | TypeScript (strict), ESLint 10, Prettier 3, Knip        |
 
 ---
 

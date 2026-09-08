@@ -1,13 +1,17 @@
 {
   "name": "vite-electron-dns",
   "version": "1.0.0",
-  "description": "An Electron application for DNS and DNS-over-HTTPS (DoH) management, built with Vite and React.",
+  "description": "High-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application built with Electron 44, Native Vite 8, React 19, Adobe React Spectrum, and Tailwind CSS v4.",
   "keywords": [
+    "adobe-react-spectrum",
     "dns",
     "dns-over-https",
     "doh",
     "electron",
     "react",
+    "react19",
+    "tailwindcss",
+    "tanstack-query",
     "typescript",
     "vite"
   ],
