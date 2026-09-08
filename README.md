@@ -11,7 +11,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Highlights
 
-- **Strict Quality Gate**: Unified verification command (`npm run check`) executing strict TypeScript, ESLint, Prettier, Knip dead-code audit, dual-track testing, and Native Vite production build.
+- **Strict Quality Gate**: Unified 7-step verification gate (`npm run check`) executing strict TypeScript, ESLint, Prettier, Knip dead-code audit, dual-track testing, Native Vite multi-target builds, and Electron packaging validation.
 - **Native Vite & Rolldown**: Built directly with standard Vite (zero third-party Electron wrapper meta-frameworks) for sub-second builds across main, preload, and renderer.
 - **Hot-Restart & Dev Runner**: Native TypeScript runner (`scripts/dev.ts`) providing true process hot-restart on main process changes, window reload on preload edits, and component-level HMR for renderer.
 - **Dual-Track Testing**: Component tests execute in headless Chromium browser mode via `@vitest/browser-playwright`, while main process, DNS resolver, and type contract tests run in Node.js.
