@@ -88,6 +88,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | `npm run check:deadcode` | Detect dead code and unused exports with Knip                     |
 | `npm run build`          | Build all targets (main, preload, renderer) with Native Vite      |
 | `npm run pack`           | Validate Electron packaging by generating unpacked directory      |
+| `npm run test:smoke`     | Validate packaged Electron application launch and UI rendering    |
 | `npm run build:main`     | Bundle Electron main process with Native Vite SSR                 |
 | `npm run build:preload`  | Bundle Electron preload script into CommonJS                      |
 | `npm run build:renderer` | Build React client application with Native Vite                   |

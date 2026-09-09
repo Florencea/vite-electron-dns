@@ -27,6 +27,7 @@
     "test:main": "vitest run --project main",
     "test:renderer": "vitest run --project renderer",
     "test:setup": "playwright install chromium",
+    "test:smoke": "node scripts/smoke-test.ts",
     "typecheck": "tsc -b"
   },
   "devDependencies": {

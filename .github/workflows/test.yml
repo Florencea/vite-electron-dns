@@ -64,12 +64,6 @@ jobs:
       - name: Try Knip deadcode check
         run: npm run check:deadcode
 
-      - name: Try build
-        run: npm run build
-
-      - name: Try pack
-        run: npm run pack
-
       - name: Get Playwright version
         id: playwright-version
         run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
@@ -88,17 +82,23 @@ jobs:
       - name: Run tests
         run: npm run test
 
+      - name: Try build
+        run: npm run build
+
+      - name: Try pack
+        run: npm run pack
+
+      - name: Try smoke test
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            xvfb-run --auto-servernum npm run test:smoke
+          else
+            npm run test:smoke
+          fi
+
       - name: Install Rosetta 2
         if: runner.os == 'macOS'
         run: sudo softwareupdate --install-rosetta --agree-to-license || true
-
-      - name: Install Wine on Linux
-        if: runner.os == 'Linux'
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends wine
-          wine --version
 
       - name: Try package on macOS
         if: runner.os == 'macOS'
@@ -115,5 +115,4 @@ jobs:
       - name: Try package on Linux
         if: runner.os == 'Linux'
         run: |
-          npm run build:win
           npm run build:linux
