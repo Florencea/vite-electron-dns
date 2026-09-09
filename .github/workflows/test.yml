@@ -30,10 +30,11 @@ jobs:
         node:
           - 22
           - 24
+          - 26
         os:
           - ubuntu-24.04
-          - macos-latest
-          - windows-latest
+          - macos-26
+          - windows-2025
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -91,8 +92,18 @@ jobs:
         if: runner.os == 'macOS'
         run: sudo softwareupdate --install-rosetta --agree-to-license || true
 
-      - name: Try package
+      - name: Try package on macOS
         if: runner.os == 'macOS'
         run: |
           npm run build:mac
           npm run build:win
+
+      - name: Try package on Windows
+        if: runner.os == 'windows'
+        run: |
+          npm run build:win
+
+      - name: Try package on Linux
+        if: runner.os == 'linux'
+        run: |
+          npm run build:linux
