@@ -92,6 +92,14 @@ jobs:
         if: runner.os == 'macOS'
         run: sudo softwareupdate --install-rosetta --agree-to-license || true
 
+      - name: Install Wine on Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends wine
+          wine --version
+
       - name: Try package on macOS
         if: runner.os == 'macOS'
         run: |
@@ -100,13 +108,12 @@ jobs:
           npm run build:linux
 
       - name: Try package on Windows
-        if: runner.os == 'windows'
+        if: runner.os == 'Windows'
         run: |
           npm run build:win
-          npm run build:linux
 
       - name: Try package on Linux
-        if: runner.os == 'linux'
+        if: runner.os == 'Linux'
         run: |
           npm run build:win
           npm run build:linux
