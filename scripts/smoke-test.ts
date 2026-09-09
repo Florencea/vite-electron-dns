@@ -46,18 +46,65 @@ function findExecutable(): string {
     // Linux
     const linuxDir = path.join(releaseDir, "linux-unpacked");
     if (fs.existsSync(linuxDir)) {
-      const entries = fs.readdirSync(linuxDir);
-      const exe = entries.find((file) => {
-        if (file.includes(".") || file.startsWith("chrome-")) {
-          return false;
-        }
+      const isExecutable = (filename: string): boolean => {
         try {
-          const fullPath = path.join(linuxDir, file);
+          const fullPath = path.join(linuxDir, filename);
           const stat = fs.statSync(fullPath);
           return stat.isFile() && (stat.mode & 0o111) !== 0;
         } catch {
           return false;
         }
+      };
+
+      const entries = fs.readdirSync(linuxDir);
+
+      // Check package name or productName first
+      const candidateNames: string[] = [];
+      const pkgPath = path.resolve(process.cwd(), "package.json");
+      if (fs.existsSync(pkgPath)) {
+        try {
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as {
+            name?: string;
+            productName?: string;
+          };
+          if (pkg.name) {
+            candidateNames.push(pkg.name);
+          }
+          if (pkg.productName) {
+            candidateNames.push(pkg.productName);
+          }
+        } catch {
+          // ignore error and proceed with fallback
+        }
+      }
+      if (process.env.VITE_TITLE) {
+        candidateNames.push(process.env.VITE_TITLE);
+      }
+
+      for (const name of candidateNames) {
+        if (entries.includes(name) && isExecutable(name)) {
+          return path.join(linuxDir, name);
+        }
+      }
+
+      // Fallback: exclude helper binaries, crashpad, and non-executable/dotted files
+      const ignoredBinaries = new Set([
+        "chrome-sandbox",
+        "chrome_crashpad_handler",
+        "crashpad_handler",
+      ]);
+
+      const exe = entries.find((file) => {
+        if (
+          file.includes(".") ||
+          file.startsWith("chrome-") ||
+          file.startsWith("chrome_") ||
+          file.includes("crashpad") ||
+          ignoredBinaries.has(file)
+        ) {
+          return false;
+        }
+        return isExecutable(file);
       });
       if (exe) {
         return path.join(linuxDir, exe);
@@ -103,6 +150,11 @@ async function runSmokeTest(): Promise<void> {
 
     const title = await window.title();
     console.log(`[smoke-test] Window title: "${title}"`);
+    if (!title || title.trim().length === 0) {
+      throw new Error(
+        "Window title is empty! Document title was not properly set.",
+      );
+    }
 
     console.log("[smoke-test] Verifying #root element render...");
     const rootLocator = window.locator("#root");
