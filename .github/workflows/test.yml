@@ -97,13 +97,16 @@ jobs:
         run: |
           npm run build:mac
           npm run build:win
+          npm run build:linux
 
       - name: Try package on Windows
         if: runner.os == 'windows'
         run: |
           npm run build:win
+          npm run build:linux
 
       - name: Try package on Linux
         if: runner.os == 'linux'
         run: |
+          npm run build:win
           npm run build:linux
