@@ -58,6 +58,9 @@ jobs:
       - name: Try lint
         run: npm run lint
 
+      - name: Try lint tailwind
+        run: npm run lint:tailwind
+
       - name: Try typecheck
         run: npm run typecheck
 

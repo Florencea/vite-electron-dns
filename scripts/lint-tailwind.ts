@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { Scanner } from "@tailwindcss/oxide";
 import { __unstable__loadDesignSystem as loadDesignSystem } from "tailwindcss";
 
@@ -66,15 +67,11 @@ async function main() {
     loadStylesheet: async (id: string, base: string) => {
       let resolved: string;
       if (id === "tailwindcss") {
-        const fileUrl = import.meta.resolve("tailwindcss/index.css");
-        resolved = fileUrl.startsWith("file://")
-          ? new URL(fileUrl).pathname
-          : fileUrl;
+        resolved = fileURLToPath(import.meta.resolve("tailwindcss/index.css"));
       } else if (id.startsWith("tailwindcss/")) {
-        const fileUrl = import.meta.resolve(id);
-        resolved = fileUrl.startsWith("file://")
-          ? new URL(fileUrl).pathname
-          : fileUrl;
+        resolved = fileURLToPath(import.meta.resolve(id));
+      } else if (id.startsWith("file://")) {
+        resolved = fileURLToPath(id);
       } else {
         resolved = path.resolve(base, id);
       }
