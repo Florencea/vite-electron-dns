@@ -17,6 +17,8 @@ Guidelines for AI agents and developers working on this repository.
   - Root `index.html` mounts `/src/renderer/main.tsx`.
   - Queries and mutations are managed through `@tanstack/react-query`.
   - All communication with the main process must pass through typed `window.api`.
+  - **React Compiler**: Automatic fine-grained memoization is enabled via `@vitejs/plugin-react` (`reactCompilerPreset`) and `@rolldown/plugin-babel`. Do not write manual `useMemo`, `useCallback`, or `React.memo` unless handling non-compiler edge cases. Conforms strictly to `eslint-plugin-react-hooks`'s `recommended-latest` rules.
+  - **Tailwind Canonical Classes**: Enforce Tailwind CSS v4 canonical class syntax via `@tailwindcss/oxide`. Run `npm run lint:tailwind` to diagnose non-canonical classes and `npm run lint:tailwind:fix` to auto-fix.
 - **Shared (`src/shared/`)**:
   - Cross-process interfaces in `src/shared/types.ts` (`ModeT`, `ServerT`).
   - Single Source of Truth for DNS server presets in `src/shared/servers.ts`.
@@ -39,6 +41,7 @@ Guidelines for AI agents and developers working on this repository.
 - **No Dead Code**: Do not leave unused dependencies, unused files, or unused exports. Knip enforces this.
 - **No Linter Workarounds**: Never weaken `eslint.config.ts`. Fix code directly to satisfy strict ESLint and TypeScript rules.
 - **Explicit String Conversions**: Call `.toString()` on numbers in template literals.
+- **Trust React Compiler for Automatic Memoization**: Never add manual `useMemo`, `useCallback`, or `React.memo` without an explicit, documented edge-case rationale.
 
 ## 3. Testing Standards
 
@@ -90,10 +93,11 @@ Runs:
 
 1. `typecheck` (`tsc -b` in strict mode)
 2. `lint` (ESLint strict + stylistic type checks)
-3. `format:check` (Prettier code style verification)
-4. `check:deadcode` (Knip dead-code audit)
-5. `test` (Vitest dual-track tests: Chromium browser + Node tests)
-6. `build` (Native Vite multi-target build: main, preload, renderer)
-7. `pack` (Electron-builder unpacked directory packaging validation)
+3. `lint:tailwind` (Official Tailwind CSS v4 canonical class check via `@tailwindcss/oxide`)
+4. `format:check` (Prettier code style verification)
+5. `check:deadcode` (Knip dead-code audit)
+6. `test` (Vitest dual-track tests: Chromium browser + Node tests)
+7. `build` (Native Vite multi-target build: main, preload, renderer)
+8. `pack` (Electron-builder unpacked directory packaging validation)
 
 All checks must pass with 0 errors and 0 warnings.

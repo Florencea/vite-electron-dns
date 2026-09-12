@@ -1,5 +1,6 @@
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
@@ -29,6 +30,12 @@ export default defineConfig(({ mode }) => {
       outDir: "dist/renderer",
       chunkSizeWarningLimit: 1000,
     },
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      babel({
+        presets: [reactCompilerPreset()],
+      }),
+      tailwindcss(),
+    ],
   };
 });

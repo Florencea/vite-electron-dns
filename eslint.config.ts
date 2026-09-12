@@ -47,7 +47,10 @@ export default defineConfig([
   },
   {
     files: ["src/renderer/**/*.{ts,tsx}", "test/renderer/**/*.{ts,tsx}"],
-    extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite()],
+    extends: [
+      reactHooks.configs.flat["recommended-latest"],
+      reactRefresh.configs.vite(),
+    ],
     languageOptions: {
       globals: globals.browser,
     },
