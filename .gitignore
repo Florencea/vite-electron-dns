@@ -6,3 +6,5 @@ out
 *.log*
 .env
 .vitest
+test-results
+playwright-report

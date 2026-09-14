@@ -35,19 +35,24 @@ Guidelines for AI agents and developers working on this repository.
 
 ## 2. Strict Coding Standards
 
-- **No `any`**: Always provide explicit TypeScript types or generics.
-- **No `@ts-ignore`**: Use `@ts-expect-error` with a descriptive reason only if strictly unavoidable (minimum 5 characters).
+- **No `any`**: Always provide explicit TypeScript types or generics. `@typescript-eslint/no-explicit-any` is strictly enforced.
+- **Strict Boundary Defense**: `noUncheckedIndexedAccess: true` and `exactOptionalPropertyTypes: true` are active in all `tsconfig*.json` targets. Check array indices and optional values defensively.
+- **No `@ts-ignore` / No `@ts-nocheck`**: Use `@ts-expect-error` with a descriptive reason only if strictly unavoidable (minimum 5 characters).
+- **Strict Hook Dependencies**: `react-hooks/exhaustive-deps` is set to `error`.
 - **No Floating Promises**: Always `await` or prefix with `void` when intentionally unhandled.
-- **No Dead Code**: Do not leave unused dependencies, unused files, or unused exports. Knip enforces this.
+- **No Dead Code**: Do not leave unused dependencies, unused files, or unused exports. Knip enforces this (`knip: { playwright: true }`).
 - **No Linter Workarounds**: Never weaken `eslint.config.ts`. Fix code directly to satisfy strict ESLint and TypeScript rules.
 - **Explicit String Conversions**: Call `.toString()` on numbers in template literals.
 - **Trust React Compiler for Automatic Memoization**: Never add manual `useMemo`, `useCallback`, or `React.memo` without an explicit, documented edge-case rationale.
 
-## 3. Testing Standards
+## 3. Testing & Ergonomics Standards
 
 - **Dual-Track Testing Architecture**:
   - **Renderer (`test:renderer`)**: Runs inside headless Chromium (`@vitest/browser-playwright`) using `vitest-browser-react`. Mounts components with `<QueryClientProvider>` and mock `window.api`.
   - **Main (`test:main`)**: Runs in Node.js environment. Tests DNS resolution algorithms, network error resilience, and preset server configurations.
+- **Browser Focus Protection**: Chromium browser instances must explicitly declare `headless: true` in `vitest.config.ts` to prevent test runners from popping up windows and stealing OS window focus.
+- **Test Output Silence**: Configured with `silent: "passed-only"` to suppress noisy logs when tests pass, while immediately surfacing logs on failure to facilitate debugging.
+- **Focused Tests (`.only`) Guard**: Vitest enforces `allowOnly: !process.env.CI`. Human developers may use `.only` during local debugging, but it is strictly forbidden in CI and automated Agent verification.
 - **End-to-End Type Safety**:
   - Static contracts in `test/canary/e2e-type-contract.test.ts` verify `Window["api"]`, `ModeT`, and `ServerT` shapes using `expectTypeOf`.
 - **Selector Standards**:
@@ -78,10 +83,23 @@ When implementing a new feature or IPC handler, follow this end-to-end type-safe
 5. **Browser Mode Test (`test/renderer/`)**:
    - Write UI interaction and mutation dispatch tests in `test/renderer/`.
    - Assert accessible selectors and state transitions.
-6. **Pass Unified Verification Gate**:
-   - Run `npm run check` and ensure 0 errors and 0 warnings.
+6. **Pass Stepped Agent Verification Ladder**:
+   - Micro-iterations / edits: `npm run agent:verify:inner`
+   - Test module updates: `npm run agent:test:unit`
+   - Full gate validation: `npm run agent:verify:gate`
 
 ## 5. Verification Gate (Definition of Done)
+
+### Agent Verification Ladder
+
+- **Inner Loop (`npm run agent:verify:inner`)**:
+  Executes `agent:typecheck` (`tsc -b --pretty false`) and `agent:lint` (`eslint --no-color --no-inline-config --max-warnings 0` + `lint:tailwind`).
+- **Unit Verification (`npm run agent:verify:unit`)**:
+  Executes `agent:verify:inner` followed by `agent:test:unit` (`vitest run --reporter=tap-flat --no-color`).
+- **Gate Pipeline (`npm run agent:verify:gate`)**:
+  Executes `agent:verify:unit` -> `build` -> `pack` -> `agent:test:e2e` (`node scripts/smoke-test.ts`).
+
+### Full Quality Gate (Definition of Done)
 
 Before completing any task or commit, execute the unified verification gate:
 

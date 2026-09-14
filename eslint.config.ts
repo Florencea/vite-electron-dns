@@ -6,7 +6,14 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["build", "dist", "release", ".vitest"]),
+  globalIgnores([
+    "build",
+    "dist",
+    "release",
+    ".vitest",
+    "test-results",
+    "playwright-report",
+  ]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [
@@ -21,6 +28,8 @@ export default defineConfig([
       },
     },
     rules: {
+      // Forbid any type
+      "@typescript-eslint/no-explicit-any": "error",
       // Allow async functions in JSX event handlers
       "@typescript-eslint/no-misused-promises": [
         "error",
@@ -51,6 +60,9 @@ export default defineConfig([
       reactHooks.configs.flat["recommended-latest"],
       reactRefresh.configs.vite(),
     ],
+    rules: {
+      "react-hooks/exhaustive-deps": "error",
+    },
     languageOptions: {
       globals: globals.browser,
     },

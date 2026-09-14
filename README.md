@@ -1,6 +1,6 @@
 # Vite Electron DNS
 
-[![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/test.yml)
+[![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron**, **Native Vite**, **React**, **Adobe React Spectrum**, **Tailwind CSS**, and **TanStack Query**.
@@ -72,30 +72,51 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Available Scripts
 
-| Command                  | Description                                                       |
-| :----------------------- | :---------------------------------------------------------------- |
-| `npm run dev`            | Start the development server with Vite HMR via native Node runner |
-| `npm run check`          | Run the unified 7-step verification gate                          |
-| `npm run test`           | Run all Vitest tests (Chromium browser + Node)                    |
-| `npm run test:renderer`  | Run renderer component tests in headless Chromium                 |
-| `npm run test:main`      | Run main process, DNS resolver, and type contract tests           |
-| `npm run test:setup`     | Install Playwright Chromium binary                                |
-| `npm run typecheck`      | Check for type errors with TypeScript in strict mode              |
-| `npm run lint`           | Lint code with ESLint                                             |
-| `npm run lint:fix`       | Automatically fix linting issues with ESLint                      |
-| `npm run format`         | Format code with Prettier                                         |
-| `npm run format:check`   | Check code formatting with Prettier                               |
-| `npm run check:deadcode` | Detect dead code and unused exports with Knip                     |
-| `npm run build`          | Build all targets (main, preload, renderer) with Native Vite      |
-| `npm run pack`           | Validate Electron packaging by generating unpacked directory      |
-| `npm run test:smoke`     | Validate packaged Electron application launch and UI rendering    |
-| `npm run build:main`     | Bundle Electron main process with Native Vite SSR                 |
-| `npm run build:preload`  | Bundle Electron preload script into CommonJS                      |
-| `npm run build:renderer` | Build React client application with Native Vite                   |
-| `npm run build:mac`      | Package macOS application into `release/`                         |
-| `npm run build:win`      | Package Windows application into `release/`                       |
-| `npm run build:linux`    | Package Linux application into `release/`                         |
-| `npm run setup`          | Download Electron binaries and install native dependencies        |
+### Developer Commands
+
+| Command                     | Description                                                       |
+| :-------------------------- | :---------------------------------------------------------------- |
+| `npm run dev`               | Start the development server with Vite HMR via native Node runner |
+| `npm run check`             | Run the unified 8-step verification gate                          |
+| `npm run test`              | Run all Vitest tests (Chromium browser + Node)                    |
+| `npm run test:unit`         | Alias for running all Vitest tests                                |
+| `npm run test:renderer`     | Run renderer component tests in headless Chromium                 |
+| `npm run test:main`         | Run main process, DNS resolver, and type contract tests           |
+| `npm run test:e2e`          | Run packaged Electron smoke & UI tests                            |
+| `npm run test:setup`        | Install Playwright Chromium binary                                |
+| `npm run test:smoke`        | Validate packaged Electron application launch and UI rendering    |
+| `npm run typecheck`         | Check for type errors with TypeScript in strict mode              |
+| `npm run lint`              | Lint code with ESLint                                             |
+| `npm run lint:fix`          | Automatically fix linting issues with ESLint                      |
+| `npm run lint:tailwind`     | Lint Tailwind CSS classes for canonical syntax                    |
+| `npm run lint:tailwind:fix` | Auto-fix Tailwind CSS classes to canonical forms                  |
+| `npm run format`            | Format code with Prettier                                         |
+| `npm run format:check`      | Check code formatting with Prettier                               |
+| `npm run check:deadcode`    | Detect dead code and unused exports with Knip                     |
+| `npm run build`             | Build all targets (main, preload, renderer) with Native Vite      |
+| `npm run pack`              | Validate Electron packaging by generating unpacked directory      |
+| `npm run build:main`        | Bundle Electron main process with Native Vite SSR                 |
+| `npm run build:preload`     | Bundle Electron preload script into CommonJS                      |
+| `npm run build:renderer`    | Build React client application with Native Vite                   |
+| `npm run build:mac`         | Package macOS application into `release/`                         |
+| `npm run build:win`         | Package Windows application into `release/`                       |
+| `npm run build:linux`       | Package Linux application into `release/`                         |
+| `npm run setup`             | Download Electron binaries and install native dependencies        |
+
+### Agent Verification Commands
+
+| Command                       | Description                                                                               |
+| :---------------------------- | :---------------------------------------------------------------------------------------- |
+| `npm run agent:typecheck`     | Fast headless type check with no terminal colors or decorative borders (`--pretty false`) |
+| `npm run agent:lint`          | Strict linting with ESLint (`--no-color --no-inline-config --max-warnings 0`) + Tailwind  |
+| `npm run agent:lint:eslint`   | Targeted ESLint run with inline escapes disabled and warnings treated as failures         |
+| `npm run agent:lint:tailwind` | Targeted Tailwind CSS canonical class validation                                          |
+| `npm run agent:lint:fix`      | Automatically fix ESLint and Tailwind canonical issues                                    |
+| `npm run agent:test:unit`     | Vitest suite using flat TAP single-line reporter with colors and progress disabled        |
+| `npm run agent:test:e2e`      | Packaged application smoke test execution                                                 |
+| `npm run agent:verify:inner`  | Fast-feedback inner loop: Typecheck + Lint                                                |
+| `npm run agent:verify:unit`   | Inner verification followed by unit tests                                                 |
+| `npm run agent:verify:gate`   | Full automated gate: Inner loop + Unit tests + Multi-target Build + Pack + E2E smoke test |
 
 ---
 

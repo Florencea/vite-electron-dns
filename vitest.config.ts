@@ -13,6 +13,8 @@ export default defineConfig((env) => {
         include: ["react-dom/client"],
       },
       test: {
+        silent: "passed-only",
+        allowOnly: !process.env.CI,
         projects: [
           {
             test: {

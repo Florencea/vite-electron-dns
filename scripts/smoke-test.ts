@@ -22,8 +22,9 @@ function findExecutable(): string {
             const macOSDir = path.join(macDir, app.name, "Contents", "MacOS");
             if (fs.existsSync(macOSDir)) {
               const binEntries = fs.readdirSync(macOSDir);
-              if (binEntries.length > 0) {
-                return path.join(macOSDir, binEntries[0]);
+              const firstBin = binEntries[0];
+              if (firstBin !== undefined) {
+                return path.join(macOSDir, firstBin);
               }
             }
           }
