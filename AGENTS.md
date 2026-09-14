@@ -18,7 +18,7 @@ Guidelines for AI agents and developers working on this repository.
   - Queries and mutations are managed through `@tanstack/react-query`.
   - All communication with the main process must pass through typed `window.api`.
   - **React Compiler**: Automatic fine-grained memoization is enabled via `@vitejs/plugin-react` (`reactCompilerPreset`) and `@rolldown/plugin-babel`. Do not write manual `useMemo`, `useCallback`, or `React.memo` unless handling non-compiler edge cases. Conforms strictly to `eslint-plugin-react-hooks`'s `recommended-latest` rules.
-  - **Tailwind Canonical Classes**: Enforce Tailwind CSS v4 canonical class syntax via `@tailwindcss/oxide`. Run `npm run lint:tailwind` to diagnose non-canonical classes and `npm run lint:tailwind:fix` to auto-fix.
+  - **Tailwind Canonical Classes**: Enforce Tailwind CSS v4 canonical class syntax via headless `@tailwindcss/language-server`. Run `npm run lint:tailwind` to diagnose non-canonical classes and `npm run lint:tailwind:fix` to auto-fix.
 - **Shared (`src/shared/`)**:
   - Cross-process interfaces in `src/shared/types.ts` (`ModeT`, `ServerT`).
   - Single Source of Truth for DNS server presets in `src/shared/servers.ts`.
@@ -111,7 +111,7 @@ Runs:
 
 1. `typecheck` (`tsc -b` in strict mode)
 2. `lint` (ESLint strict + stylistic type checks)
-3. `lint:tailwind` (Official Tailwind CSS v4 canonical class check via `@tailwindcss/oxide`)
+3. `lint:tailwind` (Official Tailwind CSS v4 diagnostic & canonical class check via headless `@tailwindcss/language-server`)
 4. `format:check` (Prettier code style verification)
 5. `check:deadcode` (Knip dead-code audit)
 6. `test` (Vitest dual-track tests: Chromium browser + Node tests)
