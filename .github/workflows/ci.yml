@@ -150,16 +150,10 @@ jobs:
             npm run agent:test:e2e
           fi
 
-      - name: Install Rosetta 2
-        if: runner.os == 'macOS'
-        run: sudo softwareupdate --install-rosetta --agree-to-license || true
-
       - name: Try package on macOS
         if: runner.os == 'macOS'
         run: |
           npm run build:mac
-          npm run build:win
-          npm run build:linux
 
       - name: Try package on Windows
         if: runner.os == 'Windows'
