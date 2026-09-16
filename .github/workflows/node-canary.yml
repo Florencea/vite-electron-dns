@@ -1,0 +1,69 @@
+name: Node Canary
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CI: "true"
+  NO_COLOR: "1"
+  NODE_ENV: development
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  canary:
+    name: Upstream Node Canary (Node ${{ matrix.node }} on ubuntu-latest)
+    runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_ENGINE_STRICT: "false"
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - 26
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies (bypass strict engine check)
+        run: npm ci --engine-strict=false
+
+      - name: Create .env file
+        run: cp .env.example .env
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-playwright-
+
+      - name: Setup test environment
+        run: npm run test:setup
+
+      - name: Build production targets
+        run: npm run build
+        continue-on-error: true
+
+      - name: Run unit and component tests
+        run: npm run test:unit
+        continue-on-error: true

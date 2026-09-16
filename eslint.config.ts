@@ -13,6 +13,7 @@ export default defineConfig([
     ".vitest",
     "test-results",
     "playwright-report",
+    ".cache",
   ]),
   {
     files: ["**/*.{ts,tsx}"],

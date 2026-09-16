@@ -1,6 +1,7 @@
 # Vite Electron DNS
 
 [![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml)
+[![Node Canary](https://github.com/Florencea/vite-electron-dns/actions/workflows/node-canary.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/node-canary.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron**, **Native Vite**, **React**, **Adobe React Spectrum**, **Tailwind CSS**, and **TanStack Query**.
@@ -117,6 +118,16 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | `npm run agent:verify:inner`  | Fast-feedback inner loop: Typecheck + Lint                                                |
 | `npm run agent:verify:unit`   | Inner verification followed by unit tests                                                 |
 | `npm run agent:verify:gate`   | Full automated gate: Inner loop + Unit tests + Multi-target Build + Pack + E2E smoke test |
+
+---
+
+## CI/CD Pipeline Architecture
+
+- **Tiered Daily CI (`.github/workflows/ci.yml`)**:
+  - **Tier 1 (`gatekeeper`)**: Runs on `ubuntu-latest` against the authoritative Node.js runtime (`package.json`). Executes dependencies installation, Playwright browser caching, the full verification gate (`format:check`, `agent:verify:inner`, `check:deadcode`, `test`, `build`, `pack`), Linux distribution packaging (`build:linux`), and full headless Electron E2E smoke testing (`xvfb-run npm run test:e2e`).
+  - **Tier 2 (`platform-compat`)**: Executes only after `gatekeeper` succeeds across `windows-latest` and `macos-latest`. Validates production builds (`build`), native compiler bindings (Rolldown, LightningCSS), runtime path compatibility (`test:unit`), and platform distribution packaging (`build:mac`, `build:win`) without duplicating static checks or heavy E2E journeys.
+- **Proactive Node Canary (`.github/workflows/node-canary.yml`)**:
+  - Scheduled weekly cron job targeting upcoming Node.js releases (Node 26 line) with `--engine-strict=false` and `continue-on-error: true` to detect upstream regressions early without breaking repository status badges.
 
 ---
 

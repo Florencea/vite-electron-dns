@@ -22,9 +22,11 @@ defaults:
     shell: bash
 
 jobs:
-  lint:
-    name: Lint & Typecheck
-    runs-on: ubuntu-24.04
+  gatekeeper:
+    name: Gatekeeper (ubuntu-latest)
+    runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -41,52 +43,9 @@ jobs:
       - name: Create .env file
         run: cp .env.example .env
 
-      - name: Verify code formatting
-        run: npm run format:check
-
-      - name: Inner verification (Typecheck & Lint)
-        run: npm run agent:verify:inner
-
-      - name: Check for dead code with Knip
-        run: npm run check:deadcode
-
-  unit-test:
-    name: Unit Tests (Node ${{ matrix.node }} on ${{ matrix.os }})
-    needs: [lint]
-    runs-on: ${{ matrix.os }}
-    env:
-      NPM_CONFIG_ENGINE_STRICT: "false"
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - 22
-          - 24
-          - 26
-        os:
-          - ubuntu-24.04
-          - macos-26
-          - windows-2025
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ matrix.node }}
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Create .env file
-        run: cp .env.example .env
-
       - name: Get Playwright version
         id: playwright-version
-        run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> $GITHUB_OUTPUT
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v6
@@ -99,42 +58,17 @@ jobs:
       - name: Setup test environment
         run: npm run test:setup
 
-      - name: Run unit tests
-        run: npm run agent:test:unit
+      - name: Verify code formatting
+        run: npm run format:check
 
-  build-and-e2e:
-    name: Build & E2E (Node ${{ matrix.node }} on ${{ matrix.os }})
-    needs: [lint]
-    runs-on: ${{ matrix.os }}
-    env:
-      NPM_CONFIG_ENGINE_STRICT: "false"
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
-    strategy:
-      fail-fast: false
-      matrix:
-        node:
-          - 22
-          - 24
-          - 26
-        os:
-          - ubuntu-24.04
-          - macos-26
-          - windows-2025
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+      - name: Inner verification (Typecheck & Lint)
+        run: npm run agent:verify:inner
 
-      - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ matrix.node }}
-          cache: npm
+      - name: Check for dead code with Knip
+        run: npm run check:deadcode
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Create .env file
-        run: cp .env.example .env
+      - name: Run unit and component tests
+        run: npm run test
 
       - name: Build production targets
         run: npm run build
@@ -143,36 +77,90 @@ jobs:
         run: npm run pack
 
       - name: Run E2E smoke test
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            xvfb-run --auto-servernum npm run agent:test:e2e
-          else
-            npm run agent:test:e2e
-          fi
-
-      - name: Try package on macOS
-        if: runner.os == 'macOS'
-        run: |
-          npm run build:mac
-
-      - name: Try package on Windows
-        if: runner.os == 'Windows'
-        run: |
-          npm run build:win
+        run: xvfb-run --auto-servernum npm run test:e2e
 
       - name: Try package on Linux
-        if: runner.os == 'Linux'
-        run: |
-          npm run build:linux
+        run: npm run build:linux
 
       - name: Upload test artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: e2e-artifacts-${{ matrix.os }}-node-${{ matrix.node }}
+          name: gatekeeper-failure-artifacts
           path: |
             release/
             test-results/
+            playwright-report/
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+  platform-compat:
+    name: Platform Compatibility (${{ matrix.os }})
+    needs: [gatekeeper]
+    runs-on: ${{ matrix.os }}
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js from package.json
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env file
+        run: cp .env.example .env
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-playwright-
+
+      - name: Setup test environment
+        run: npm run test:setup
+
+      - name: Build production targets
+        run: npm run build
+
+      - name: Run unit and component tests
+        run: npm run test:unit
+
+      - name: Try package on macOS
+        if: runner.os == 'macOS'
+        run: npm run build:mac
+
+      - name: Try package on Windows
+        if: runner.os == 'Windows'
+        run: npm run build:win
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: platform-compat-failure-artifacts-${{ matrix.os }}
+          path: |
+            release/
+            test-results/
+            playwright-report/
             *.log
           if-no-files-found: ignore
           retention-days: 7

@@ -120,6 +120,14 @@ Runs:
 
 All checks must pass with 0 errors and 0 warnings.
 
+### Continuous Integration (CI/CD) Architecture
+
+- **Tiered Daily CI (`.github/workflows/ci.yml`)**:
+  - **Tier 1 (`gatekeeper`)**: Executes on `ubuntu-latest` using authoritative Node.js (`package.json`). Runs clean install, Playwright browser caching, full quality gate (`format:check`, `agent:verify:inner`, `check:deadcode`, `test`, `build`, `pack`), Linux distribution packaging (`build:linux`), and headless Electron E2E journeys (`xvfb-run npm run test:e2e`).
+  - **Tier 2 (`platform-compat`)**: Gated on `gatekeeper` success across `windows-latest` and `macos-latest`. Validates native compilers (Rolldown, LightningCSS), multi-target builds, path separators / runtime behavior (`test:unit`), and platform packaging (`build:mac`, `build:win`) without repeating static checks or E2E tests.
+- **Upstream Node Canary (`.github/workflows/node-canary.yml`)**:
+  - Scheduled weekly workflow testing upcoming Node.js release lines (Node 26) with `--engine-strict=false` and `continue-on-error: true` to detect upstream runtime regressions proactively.
+
 ## 6. Git Workflow & Commit Restrictions
 
 - **NEVER execute `git commit` directly**: Local environment uses 1Password SSH signing; running `git commit` in non-interactive/subshell will fail.
