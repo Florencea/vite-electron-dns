@@ -8,6 +8,7 @@
   "main": "./dist/main/index.js",
   "scripts": {
     "agent:lint": "npm run agent:lint:eslint && npm run agent:lint:tailwind",
+    "agent:lint:ci": "actionlint --no-color",
     "agent:lint:eslint": "eslint --no-color --no-inline-config --max-warnings 0",
     "agent:lint:fix": "eslint --fix && node scripts/lint-tailwind.ts --fix",
     "agent:lint:tailwind": "node scripts/lint-tailwind.ts",
@@ -30,6 +31,7 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint",
+    "lint:ci": "actionlint",
     "lint:fix": "eslint --fix",
     "lint:tailwind": "node scripts/lint-tailwind.ts",
     "lint:tailwind:fix": "node scripts/lint-tailwind.ts --fix",
@@ -88,6 +90,9 @@
       "src/main/index.ts",
       "src/preload/index.ts",
       "electron-builder-config.ts"
+    ],
+    "ignoreBinaries": [
+      "actionlint"
     ],
     "ignoreDependencies": [
       "@tailwindcss/language-server"

@@ -88,6 +88,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | `npm run test:smoke`        | Validate packaged Electron application launch and UI rendering    |
 | `npm run typecheck`         | Check for type errors with TypeScript in strict mode              |
 | `npm run lint`              | Lint code with ESLint                                             |
+| `npm run lint:ci`           | Lint GitHub Actions workflows locally with actionlint             |
 | `npm run lint:fix`          | Automatically fix linting issues with ESLint                      |
 | `npm run lint:tailwind`     | Lint Tailwind CSS classes for canonical syntax                    |
 | `npm run lint:tailwind:fix` | Auto-fix Tailwind CSS classes to canonical forms                  |
@@ -110,6 +111,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 | :---------------------------- | :---------------------------------------------------------------------------------------- |
 | `npm run agent:typecheck`     | Fast headless type check with no terminal colors or decorative borders (`--pretty false`) |
 | `npm run agent:lint`          | Strict linting with ESLint (`--no-color --no-inline-config --max-warnings 0`) + Tailwind  |
+| `npm run agent:lint:ci`       | Headless workflow validation with actionlint (`--no-color`)                               |
 | `npm run agent:lint:eslint`   | Targeted ESLint run with inline escapes disabled and warnings treated as failures         |
 | `npm run agent:lint:tailwind` | Targeted Tailwind CSS canonical class validation                                          |
 | `npm run agent:lint:fix`      | Automatically fix ESLint and Tailwind canonical issues                                    |

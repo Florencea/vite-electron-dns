@@ -120,6 +120,16 @@ Runs:
 
 All checks must pass with 0 errors and 0 warnings.
 
+### CI Workflow Verification (Shift-Left Guardrail)
+
+Whenever `.github/workflows/` files are added or modified:
+
+- **Mandatory Local Audit**: Running `actionlint` locally with **0 errors and 0 warnings** is a strict prerequisite before staging any workflow changes.
+- **Commands**:
+  - Direct execution: `actionlint`
+  - Agent / script execution: `npm run agent:lint:ci` (or `npm run lint:ci`)
+- **Offline / Shift-Left Policy**: `actionlint` is strictly an offline, local developer and agent verification guardrail. It **must not** be embedded or added as a step or job inside remote GitHub Actions workflows (`ci.yml` or `node-canary.yml`). Remote CI runners focus on multi-platform builds, packaging, and dual-track test execution.
+
 ### Continuous Integration (CI/CD) Architecture
 
 - **Tiered Daily CI (`.github/workflows/ci.yml`)**:
@@ -132,5 +142,6 @@ All checks must pass with 0 errors and 0 warnings.
 
 - **NEVER execute `git commit` directly**: Local environment uses 1Password SSH signing; running `git commit` in non-interactive/subshell will fail.
 - **Standard Protocol**:
-  1. Stage changes with `git add <files>`.
-  2. Output the complete `git commit -m "..."` command with a concise commit message in English in chat for user to review and run locally.
+  1. For workflow changes under `.github/workflows/`, verify clean execution via `actionlint` or `npm run agent:lint:ci` (0 errors, 0 warnings).
+  2. Stage changes with `git add <files>`.
+  3. Output the complete `git commit -m "..."` command with a concise commit message in English in chat for user to review and run locally.
