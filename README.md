@@ -56,14 +56,7 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
    npm run test:setup
    ```
 
-3. **Configure Environment Variables:**
-   Copy `.env.example` to a new file named `.env` and customize the variables.
-
-   ```sh
-   cp .env.example .env
-   ```
-
-4. **Run in development mode:**
+3. **Run in development mode:**
 
    ```sh
    npm run dev

@@ -31,7 +31,6 @@
     "src/main/**/*",
     "src/preload/**/*",
     "src/shared/**/*",
-    "src/vite-env.d.ts",
     "test/main/**/*",
     "test/canary/**/*"
   ]

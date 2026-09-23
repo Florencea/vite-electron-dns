@@ -1,9 +1,9 @@
-import "dotenv/config";
 import type { Configuration } from "electron-builder";
+import { APP_CONFIG } from "./src/shared/config";
 
 const config = {
-  appId: process.env.VITE_APPID ?? "",
-  productName: process.env.VITE_TITLE ?? "",
+  appId: APP_CONFIG.appId,
+  productName: APP_CONFIG.title,
   directories: {
     output: "release",
   },

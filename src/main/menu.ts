@@ -1,11 +1,12 @@
 import electron, { type MenuItemConstructorOptions } from "electron";
+import { APP_CONFIG } from "../shared/config";
 const { Menu, app } = electron;
 
 const isDev = !app.isPackaged;
 
 const isMac = process.platform === "darwin";
 
-const appName = import.meta.env.VITE_TITLE;
+const appName = APP_CONFIG.title;
 
 const menuMac: MenuItemConstructorOptions[] = [
   {

@@ -1,5 +1,6 @@
 import { expectTypeOf, test } from "vitest";
 import type { DnsQueryT } from "../../src/main/dns";
+import type { AppConfig } from "../../src/shared/config";
 import type { ModeT, ServerT, WindowApi } from "../../src/shared/types";
 
 test("E2E Type Contract: ModeT is strictly union of 'dns' and 'doh'", () => {
@@ -43,4 +44,14 @@ test("E2E Type Contract: WindowApi contract matches preload exposition", () => {
   expectTypeOf<WindowApi["queryIpv6"]>().toEqualTypeOf<
     (mode: ModeT, name: string) => Promise<string[]>
   >();
+});
+
+test("E2E Type Contract: AppConfig adheres to required structural schema", () => {
+  expectTypeOf<AppConfig>().toEqualTypeOf<{
+    title: string;
+    appId: string;
+  }>();
+
+  expectTypeOf<AppConfig>().toHaveProperty("title").toBeString();
+  expectTypeOf<AppConfig>().toHaveProperty("appId").toBeString();
 });

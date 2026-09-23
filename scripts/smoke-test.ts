@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { _electron as electron } from "playwright";
+import { APP_CONFIG } from "../src/shared/config.ts";
 
 function findExecutable(): string {
   const releaseDir = path.resolve(process.cwd(), "release");
@@ -78,9 +79,7 @@ function findExecutable(): string {
           // ignore error and proceed with fallback
         }
       }
-      if (process.env.VITE_TITLE) {
-        candidateNames.push(process.env.VITE_TITLE);
-      }
+      candidateNames.push(APP_CONFIG.title);
 
       for (const name of candidateNames) {
         if (entries.includes(name) && isExecutable(name)) {

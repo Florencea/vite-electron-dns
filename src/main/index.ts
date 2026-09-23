@@ -1,5 +1,6 @@
 import electron from "electron";
 import { URL, fileURLToPath } from "node:url";
+import { APP_CONFIG } from "../shared/config";
 import { fetchHost, resolveHost } from "./dns";
 import { menu } from "./menu";
 const { BrowserWindow, Menu, app, ipcMain, shell } = electron;
@@ -26,7 +27,7 @@ const createWindow = () => {
     autoHideMenuBar: true,
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: { preload: preloadFile },
-    title: import.meta.env.VITE_TITLE,
+    title: APP_CONFIG.title,
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -41,7 +42,7 @@ if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
   void app.whenReady().then(() => {
-    app.setAppUserModelId(import.meta.env.VITE_APPID);
+    app.setAppUserModelId(APP_CONFIG.appId);
 
     createWindow();
 

@@ -60,7 +60,6 @@
     "@vitejs/plugin-react": "6.1.1",
     "@vitest/browser-playwright": "5.0.1",
     "babel-plugin-react-compiler": "1.0.0",
-    "dotenv": "17.4.2",
     "electron": "44.4.5",
     "electron-builder": "26.16.1",
     "eslint": "10.11.0",

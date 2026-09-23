@@ -40,9 +40,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Create .env file
-        run: cp .env.example .env
-
       - name: Get Playwright version
         id: playwright-version
         run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> "$GITHUB_OUTPUT"
@@ -119,9 +116,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Create .env file
-        run: cp .env.example .env
 
       - name: Get Playwright version
         id: playwright-version
