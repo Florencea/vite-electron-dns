@@ -30,6 +30,11 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    run: {
+      cache: {
+        scripts: true,
+      },
+    },
     base: "./",
     server: {
       watch: {

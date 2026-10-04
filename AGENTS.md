@@ -57,6 +57,7 @@ Prioritize `vpr agent:*` commands matching Antigravity's security whitelist:
 - **Unit Tests**: `vpr agent:test:unit`
 - **Lint & Fix**: `vpr agent:lint:fix`, `vpr agent:lint:tailwind:fix`
 - **CI Lint**: `vpr agent:lint:ci` (`actionlint` 0 errors/warnings)
+- **Task Caching**: Scripts executed via `vpr` leverage Vite Task caching (`run.cache: { scripts: true }`). Unmodified steps replay in milliseconds. Use `vpr --last-details` to inspect cache hit status or `vp cache clean` / `vpr --no-cache` to force clean execution.
 
 ---
 
