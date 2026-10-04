@@ -76,9 +76,6 @@ export default defineConfig(({ mode }) => {
       ],
       sortPackageJson: true,
     },
-    staged: {
-      "*.{ts,tsx}": "vp check --fix",
-    },
     plugins: [
       react({
         compiler: true,
