@@ -83,9 +83,22 @@ export function electronDevPlugin(): Plugin {
 
           const binPath = typeof electronPath === "string" ? electronPath : "electron";
           const proc = spawn(binPath, ["."], {
-            stdio: "inherit",
+            stdio: ["inherit", "inherit", "pipe"],
             env,
           });
+
+          if (proc.stderr !== null) {
+            proc.stderr.setEncoding("utf-8");
+            proc.stderr.on("data", (chunk: string) => {
+              const lines = chunk.split("\n");
+              const filtered = lines.filter(
+                (line) => !line.includes("sandbox_extension_issue_file failed"),
+              );
+              if (filtered.some((line) => line.trim().length > 0)) {
+                process.stderr.write(filtered.join("\n"));
+              }
+            });
+          }
 
           proc.on("close", (code: number | null) => {
             if (!isRestarting) {
