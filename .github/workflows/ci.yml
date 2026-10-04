@@ -15,7 +15,7 @@ permissions:
 env:
   CI: "true"
   NO_COLOR: "1"
-  NODE_ENV: development
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
 
 defaults:
   run:
@@ -23,61 +23,69 @@ defaults:
 
 jobs:
   gatekeeper:
-    name: Gatekeeper (ubuntu-latest)
+    name: Gatekeeper (Linux)
     runs-on: ubuntu-latest
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Setup Node.js from package.json
-        uses: actions/setup-node@v7
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version-file: package.json
-          cache: npm
+          cache: true
 
       - name: Install dependencies
-        run: npm ci
+        run: vp install
 
       - name: Get Playwright version
         id: playwright-version
-        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(vp exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v6
+        id: playwright-cache
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright-version.outputs.version }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-playwright-
 
-      - name: Setup test environment
-        run: npm run test:setup
+      - name: Setup test environment (install browser)
+        run: vp run test:setup
 
-      - name: Verify code formatting
-        run: npm run format:check
+      - name: Install Playwright system dependencies on Linux
+        run: vp exec playwright install-deps chromium
 
-      - name: Inner verification (Typecheck & Lint)
-        run: npm run agent:verify:inner
+      - name: Typecheck
+        run: vp run agent:typecheck
 
-      - name: Check for dead code with Knip
-        run: npm run check:deadcode
+      - name: Check (Oxlint & Oxfmt)
+        run: vp check
+
+      - name: Lint (Tailwind CSS)
+        run: vp run agent:lint:tailwind
+
+      - name: Check dead code (Knip)
+        run: vp run check:deadcode
 
       - name: Run unit and component tests
-        run: npm run test
+        run: vp run agent:test:unit
 
       - name: Build production targets
-        run: npm run build
+        run: |
+          vp build --mode main
+          vp build --mode preload
+          vp build
 
       - name: Pack unpacked application
-        run: npm run pack
+        run: vp run app:pack
 
       - name: Run E2E smoke test
-        run: xvfb-run --auto-servernum npm run test:e2e
+        run: xvfb-run --auto-servernum vp run agent:test:e2e
 
       - name: Try package on Linux
-        run: npm run build:linux
+        run: vp run app:linux
 
       - name: Upload test artifacts on failure
         if: failure()
@@ -94,57 +102,59 @@ jobs:
 
   platform-compat:
     name: Platform Compatibility (${{ matrix.os }})
-    needs: [gatekeeper]
+    needs: gatekeeper
     runs-on: ${{ matrix.os }}
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
     strategy:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
           - macos-latest
+          - windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Setup Node.js from package.json
-        uses: actions/setup-node@v7
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version-file: package.json
-          cache: npm
+          cache: true
 
       - name: Install dependencies
-        run: npm ci
+        run: vp install
+
+      - name: Build production targets
+        run: |
+          vp build --mode main
+          vp build --mode preload
+          vp build
 
       - name: Get Playwright version
         id: playwright-version
-        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(vp exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v6
+        id: playwright-cache
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright-version.outputs.version }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-playwright-
 
-      - name: Setup test environment
-        run: npm run test:setup
-
-      - name: Build production targets
-        run: npm run build
+      - name: Setup test environment (install browser)
+        run: vp run test:setup
 
       - name: Run unit and component tests
-        run: npm run test:unit
+        run: vp run agent:test:unit
 
       - name: Try package on macOS
         if: runner.os == 'macOS'
-        run: npm run build:mac
+        run: vp run app:mac
 
       - name: Try package on Windows
         if: runner.os == 'Windows'
-        run: npm run build:win
+        run: vp run app:win
 
       - name: Upload test artifacts on failure
         if: failure()

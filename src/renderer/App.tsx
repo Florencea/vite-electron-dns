@@ -40,19 +40,10 @@ export const App = () => {
   const isLoading = ipv4.isPending || ipv6.isPending;
 
   return (
-    <Provider
-      locale="en-US"
-      theme={defaultTheme}
-      UNSAFE_className="h-svh overflow-y-scroll"
-    >
+    <Provider locale="en-US" theme={defaultTheme} UNSAFE_className="h-svh overflow-y-scroll">
       <View padding="size-200" paddingTop="size-200">
         <Flex direction="column" gap="size-100">
-          <View
-            borderWidth="thin"
-            borderColor="dark"
-            borderRadius="medium"
-            padding="size-250"
-          >
+          <View borderWidth="thin" borderColor="dark" borderRadius="medium" padding="size-250">
             <Form
               isDisabled={isLoading}
               onSubmit={async (e) => {
@@ -76,7 +67,9 @@ export const App = () => {
                   orientation="horizontal"
                   value={mode}
                   onChange={async (value) => {
-                    setMode(value as ModeT);
+                    if (value === "dns" || value === "doh") {
+                      setMode(value);
+                    }
                     await ipv4.mutateAsync("");
                     await ipv6.mutateAsync("");
                   }}
@@ -97,10 +90,7 @@ export const App = () => {
             </Form>
           </View>
           <View paddingBottom="size-200">
-            <Grid
-              columns={repeat("auto-fill", minmax("300px", "1fr"))}
-              gap="size-200"
-            >
+            <Grid columns={repeat("auto-fill", minmax("300px", "1fr"))} gap="size-200">
               {window.api.servers
                 .filter((s) => {
                   if (mode === "dns") {
@@ -109,12 +99,7 @@ export const App = () => {
                   return s.server !== "-";
                 })
                 .map(({ title, server, ip, description, document }, idx) => (
-                  <Well
-                    flexShrink={0}
-                    key={title}
-                    role="region"
-                    aria-labelledby={title}
-                  >
+                  <Well flexShrink={0} key={title} role="region" aria-labelledby={title}>
                     <Header>
                       <Flex justifyContent="space-between">
                         <Heading level={1} id={title}>
@@ -126,22 +111,13 @@ export const App = () => {
                             <Flex direction="column" gap="size-200">
                               <Text>{description}</Text>
                               {document !== "-" && (
-                                <Link
-                                  href={document}
-                                  target="_blank"
-                                  rel="noreferer"
-                                >
+                                <Link href={document} target="_blank" rel="noreferer">
                                   Document
                                 </Link>
                               )}
-                              {ip !== "-" && (
-                                <LabeledValue label="DNS" value={ip} />
-                              )}
+                              {ip !== "-" && <LabeledValue label="DNS" value={ip} />}
                               {server !== "-" && (
-                                <LabeledValue
-                                  label="DNS over HTTPS"
-                                  value={server}
-                                />
+                                <LabeledValue label="DNS over HTTPS" value={server} />
                               )}
                             </Flex>
                           </Content>
@@ -152,9 +128,7 @@ export const App = () => {
                     <Content>
                       <code className="whitespace-pre-wrap">
                         {ipv4.data
-                          ? (ipv4.data.map((a, i) =>
-                              [a, ipv6.data?.[i]].join("\n"),
-                            )[idx] ?? "")
+                          ? (ipv4.data.map((a, i) => [a, ipv6.data?.[i]].join("\n"))[idx] ?? "")
                           : ""}
                       </code>
                     </Content>

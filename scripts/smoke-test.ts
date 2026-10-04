@@ -2,14 +2,18 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { _electron as electron } from "playwright";
+import { z } from "zod";
 import { APP_CONFIG } from "../src/shared/config.ts";
 
+const PackageJsonSchema = z.object({
+  name: z.string().optional(),
+  productName: z.string().optional(),
+});
+
 function findExecutable(): string {
-  const releaseDir = path.resolve(process.cwd(), "release");
+  const releaseDir = path.resolve(import.meta.dirname, "../release");
   if (!fs.existsSync(releaseDir)) {
-    throw new Error(
-      `Release directory not found at ${releaseDir}. Did you run "npm run pack"?`,
-    );
+    throw new Error(`Release directory not found at ${releaseDir}. Did you run "vpr app:pack"?`);
   }
 
   if (process.platform === "darwin") {
@@ -37,8 +41,7 @@ function findExecutable(): string {
     if (fs.existsSync(winDir)) {
       const entries = fs.readdirSync(winDir);
       const exe = entries.find(
-        (file) =>
-          file.endsWith(".exe") && !file.toLowerCase().includes("uninstall"),
+        (file) => file.endsWith(".exe") && !file.toLowerCase().includes("uninstall"),
       );
       if (exe) {
         return path.join(winDir, exe);
@@ -62,18 +65,18 @@ function findExecutable(): string {
 
       // Check package name or productName first
       const candidateNames: string[] = [];
-      const pkgPath = path.resolve(process.cwd(), "package.json");
+      const pkgPath = path.resolve(import.meta.dirname, "../package.json");
       if (fs.existsSync(pkgPath)) {
         try {
-          const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8")) as {
-            name?: string;
-            productName?: string;
-          };
-          if (pkg.name) {
-            candidateNames.push(pkg.name);
-          }
-          if (pkg.productName) {
-            candidateNames.push(pkg.productName);
+          const raw: unknown = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+          const parsed = PackageJsonSchema.safeParse(raw);
+          if (parsed.success) {
+            if (parsed.data.name !== undefined) {
+              candidateNames.push(parsed.data.name);
+            }
+            if (parsed.data.productName !== undefined) {
+              candidateNames.push(parsed.data.productName);
+            }
           }
         } catch {
           // ignore error and proceed with fallback
@@ -151,9 +154,7 @@ async function runSmokeTest(): Promise<void> {
     const title = await window.title();
     console.log(`[smoke-test] Window title: "${title}"`);
     if (!title || title.trim().length === 0) {
-      throw new Error(
-        "Window title is empty! Document title was not properly set.",
-      );
+      throw new Error("Window title is empty! Document title was not properly set.");
     }
 
     console.log("[smoke-test] Verifying #root element render...");
@@ -162,16 +163,12 @@ async function runSmokeTest(): Promise<void> {
 
     const innerHtml = await rootLocator.innerHTML();
     if (innerHtml.trim().length === 0) {
-      throw new Error(
-        "Application #root element is empty! React failed to render UI.",
-      );
+      throw new Error("Application #root element is empty! React failed to render UI.");
     }
 
     if (pageErrors.length > 0) {
       const errorMessages = pageErrors.map((err) => err.message).join("; ");
-      throw new Error(
-        `Encountered page errors during launch: ${errorMessages}`,
-      );
+      throw new Error(`Encountered page errors during launch: ${errorMessages}`);
     }
 
     console.log(
@@ -187,5 +184,5 @@ async function runSmokeTest(): Promise<void> {
 
 runSmokeTest().catch((error: unknown) => {
   console.error("[smoke-test] Test failed:", error);
-  process.exit(1);
+  process.exitCode = 1;
 });

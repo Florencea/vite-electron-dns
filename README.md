@@ -12,9 +12,9 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ## Highlights
 
-- **Strict Quality Gate**: Unified 7-step verification gate (`npm run check`) executing strict TypeScript, ESLint, Prettier, Knip dead-code audit, dual-track testing, Native Vite multi-target builds, and Electron packaging validation.
+- **Strict Quality Gate**: Unified verification gate (`vpr agent:verify:gate`) executing strict TypeScript, Oxlint, Oxfmt, Knip dead-code audit, dual-track testing, Vite+ multi-target builds, and Electron packaging validation.
 - **Native Vite & Rolldown**: Built directly with standard Vite (zero third-party Electron wrapper meta-frameworks) for sub-second builds across main, preload, and renderer.
-- **Hot-Restart & Dev Runner**: Native TypeScript runner (`scripts/dev.ts`) providing true process hot-restart on main process changes, window reload on preload edits, and component-level HMR for renderer.
+- **Hot-Restart & Dev Runner**: Native Vite+ dev runner (`vp dev`) providing true process hot-restart on main process changes, window reload on preload edits, and component-level HMR for renderer.
 - **Dual-Track Testing**: Component tests execute in headless Chromium browser mode via `@vitest/browser-playwright`, while main process, DNS resolver, and type contract tests run in Node.js.
 - **Agent-First Workflow**: Clear architectural boundaries, strict coding rules, and TDD workflow documented in [AGENTS.md](AGENTS.md).
 - **Process Isolation & Security**: Safe context bridge exposition ensuring raw Node.js internals and IPC channels remain isolated from the renderer.
@@ -68,59 +68,42 @@ Designed for deterministic DNS evaluation across preset and custom resolvers, fe
 
 ### Developer Commands
 
-| Command                     | Description                                                       |
-| :-------------------------- | :---------------------------------------------------------------- |
-| `npm run dev`               | Start the development server with Vite HMR via native Node runner |
-| `npm run check`             | Run the unified 8-step verification gate                          |
-| `npm run test`              | Run all Vitest tests (Chromium browser + Node)                    |
-| `npm run test:unit`         | Alias for running all Vitest tests                                |
-| `npm run test:renderer`     | Run renderer component tests in headless Chromium                 |
-| `npm run test:main`         | Run main process, DNS resolver, and type contract tests           |
-| `npm run test:e2e`          | Run packaged Electron smoke & UI tests                            |
-| `npm run test:setup`        | Install Playwright Chromium binary                                |
-| `npm run test:smoke`        | Validate packaged Electron application launch and UI rendering    |
-| `npm run typecheck`         | Check for type errors with TypeScript in strict mode              |
-| `npm run lint`              | Lint code with ESLint                                             |
-| `npm run lint:ci`           | Lint GitHub Actions workflows locally with actionlint             |
-| `npm run lint:fix`          | Automatically fix linting issues with ESLint                      |
-| `npm run lint:tailwind`     | Lint Tailwind CSS classes for canonical syntax                    |
-| `npm run lint:tailwind:fix` | Auto-fix Tailwind CSS classes to canonical forms                  |
-| `npm run format`            | Format code with Prettier                                         |
-| `npm run format:check`      | Check code formatting with Prettier                               |
-| `npm run check:deadcode`    | Detect dead code and unused exports with Knip                     |
-| `npm run build`             | Build all targets (main, preload, renderer) with Native Vite      |
-| `npm run pack`              | Validate Electron packaging by generating unpacked directory      |
-| `npm run build:main`        | Bundle Electron main process with Native Vite SSR                 |
-| `npm run build:preload`     | Bundle Electron preload script into CommonJS                      |
-| `npm run build:renderer`    | Build React client application with Native Vite                   |
-| `npm run build:mac`         | Package macOS application into `release/`                         |
-| `npm run build:win`         | Package Windows application into `release/`                       |
-| `npm run build:linux`       | Package Linux application into `release/`                         |
-| `npm run setup`             | Download Electron binaries and install native dependencies        |
+| Command              | Description                                                         |
+| :------------------- | :------------------------------------------------------------------ |
+| `vp dev`             | Start development environment with Electron runner (Vite+ built-in) |
+| `vp check`           | Run format, Oxlint, and type checks together (Vite+ built-in)       |
+| `vp fmt`             | Format code with Oxfmt (Vite+ built-in)                             |
+| `vp lint`            | Lint code with Oxlint (Vite+ built-in)                              |
+| `vp test`            | Run all Vitest tests (Chromium browser + Node) (Vite+ built-in)     |
+| `vpr check:deadcode` | Detect dead code and unused exports with Knip                       |
+| `vpr app:pack`       | Validate Electron packaging by generating unpacked directory        |
+| `vpr app:mac`        | Package macOS application into `release/`                           |
+| `vpr app:win`        | Package Windows application into `release/`                         |
+| `vpr app:linux`      | Package Linux application into `release/`                           |
+| `vpr test:setup`     | Install Playwright Chromium binary                                  |
 
 ### Agent Verification Commands
 
-| Command                       | Description                                                                               |
-| :---------------------------- | :---------------------------------------------------------------------------------------- |
-| `npm run agent:typecheck`     | Fast headless type check with no terminal colors or decorative borders (`--pretty false`) |
-| `npm run agent:lint`          | Strict linting with ESLint (`--no-color --no-inline-config --max-warnings 0`) + Tailwind  |
-| `npm run agent:lint:ci`       | Headless workflow validation with actionlint (`--no-color`)                               |
-| `npm run agent:lint:eslint`   | Targeted ESLint run with inline escapes disabled and warnings treated as failures         |
-| `npm run agent:lint:tailwind` | Targeted Tailwind CSS canonical class validation                                          |
-| `npm run agent:lint:fix`      | Automatically fix ESLint and Tailwind canonical issues                                    |
-| `npm run agent:test:unit`     | Vitest suite using flat TAP single-line reporter with colors and progress disabled        |
-| `npm run agent:test:e2e`      | Packaged application smoke test execution                                                 |
-| `npm run agent:verify:inner`  | Fast-feedback inner loop: Typecheck + Lint                                                |
-| `npm run agent:verify:unit`   | Inner verification followed by unit tests                                                 |
-| `npm run agent:verify:gate`   | Full automated gate: Inner loop + Unit tests + Multi-target Build + Pack + E2E smoke test |
+| Command                   | Description                                                                              |
+| :------------------------ | :--------------------------------------------------------------------------------------- |
+| `vpr agent:typecheck`     | Fast headless type check (`tsc -b --pretty false`)                                       |
+| `vpr agent:lint`          | Strict linting with Oxlint + Tailwind CSS validator                                      |
+| `vpr agent:lint:ci`       | Headless workflow validation with actionlint (`actionlint`)                              |
+| `vpr agent:lint:tailwind` | Targeted Tailwind CSS canonical class validation                                         |
+| `vpr agent:lint:fix`      | Automatically fix Oxlint and Tailwind canonical issues                                   |
+| `vpr agent:test:unit`     | Vitest suite using flat TAP single-line reporter with colors and progress disabled       |
+| `vpr agent:test:e2e`      | Packaged application smoke test execution                                                |
+| `vpr agent:verify:inner`  | Fast-feedback inner loop: Typecheck + Lint                                               |
+| `vpr agent:verify:unit`   | Inner verification followed by unit tests                                                |
+| `vpr agent:verify:gate`   | Full automated gate: Inner loop + Unit tests + Multi-target Build + App Pack + E2E smoke |
 
 ---
 
 ## CI/CD Pipeline Architecture
 
 - **Tiered Daily CI (`.github/workflows/ci.yml`)**:
-  - **Tier 1 (`gatekeeper`)**: Runs on `ubuntu-latest` against the authoritative Node.js runtime (`package.json`). Executes dependencies installation, Playwright browser caching, the full verification gate (`format:check`, `agent:verify:inner`, `check:deadcode`, `test`, `build`, `pack`), Linux distribution packaging (`build:linux`), and full headless Electron E2E smoke testing (`xvfb-run npm run test:e2e`).
-  - **Tier 2 (`platform-compat`)**: Executes only after `gatekeeper` succeeds across `windows-latest` and `macos-latest`. Validates production builds (`build`), native compiler bindings (Rolldown, LightningCSS), runtime path compatibility (`test:unit`), and platform distribution packaging (`build:mac`, `build:win`) without duplicating static checks or heavy E2E journeys.
+  - **Tier 1 (`gatekeeper`)**: Runs on `ubuntu-latest` against the authoritative Node.js runtime (`package.json`). Executes dependencies installation, Playwright browser caching, the full verification gate (`vp check`, `agent:verify:inner`, `check:deadcode`, `agent:test:unit`, `build`, `app:pack`), Linux distribution packaging (`app:linux`), and full headless Electron E2E smoke testing (`xvfb-run vp run test:e2e`).
+  - **Tier 2 (`platform-compat`)**: Executes only after `gatekeeper` succeeds across `windows-latest` and `macos-latest`. Validates production builds (`build`), native compiler bindings (Rolldown, LightningCSS), runtime path compatibility (`agent:test:unit`), and platform distribution packaging (`app:mac`, `app:win`) without duplicating static checks or heavy E2E journeys.
 - **Proactive Node Canary (`.github/workflows/node-canary.yml`)**:
   - Scheduled weekly cron job targeting upcoming Node.js releases (Node 26 line) with `--engine-strict=false` and `continue-on-error: true` to detect upstream regressions early without breaking repository status badges.
 

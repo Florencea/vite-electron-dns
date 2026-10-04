@@ -1,14 +1,6 @@
-import type { IpcMainInvokeEvent } from "electron";
 import { describe, expect, it, vi } from "vitest";
-import {
-  fetchDns,
-  fetchHost,
-  resolveDns,
-  resolveHost,
-} from "../../src/main/dns";
+import { fetchDns, fetchHost, resolveDns, resolveHost } from "../../src/main/dns";
 import { SERVERS } from "../../src/shared/servers";
-
-const mockEvent = {} as IpcMainInvokeEvent;
 
 describe("SERVERS configuration", () => {
   it("contains at least 5 default DNS resolvers", () => {
@@ -22,10 +14,7 @@ describe("SERVERS configuration", () => {
       expect(s.document.trim().length).toBeGreaterThan(0);
       expect(s.server.trim().length).toBeGreaterThan(0);
       expect(s.ip.trim().length).toBeGreaterThan(0);
-
-      if (s.server !== "-") {
-        expect(s.server).toMatch(/^https:\/\//);
-      }
+      expect(s.server === "-" || s.server.startsWith("https://")).toBe(true);
     }
   });
 });
@@ -43,7 +32,8 @@ describe("fetchDns (DoH)", () => {
 
   it("handles successful DoH response and formats IPv4 results", async () => {
     const originalFetch = globalThis.fetch;
-    globalThis.fetch = vi.fn().mockResolvedValue(
+    const mockFetch = vi.fn<typeof fetch>();
+    mockFetch.mockResolvedValue(
       new Response(
         JSON.stringify({
           Answer: [
@@ -54,6 +44,7 @@ describe("fetchDns (DoH)", () => {
         { status: 200, headers: { "Content-Type": "application/json" } },
       ),
     );
+    globalThis.fetch = mockFetch;
 
     const res = await fetchDns({
       server: "https://dns.google/resolve",
@@ -71,9 +62,9 @@ describe("fetchDns (DoH)", () => {
 
   it("returns empty string when fetch response status is non-2xx", async () => {
     const originalFetch = globalThis.fetch;
-    globalThis.fetch = vi
-      .fn()
-      .mockResolvedValue(new Response("Server Error", { status: 500 }));
+    const mockFetch = vi.fn<typeof fetch>();
+    mockFetch.mockResolvedValue(new Response("Server Error", { status: 500 }));
+    globalThis.fetch = mockFetch;
 
     const res = await fetchDns({
       server: "https://dns.google/resolve",
@@ -89,7 +80,9 @@ describe("fetchDns (DoH)", () => {
 
   it("returns empty string when fetch throws network error", async () => {
     const originalFetch = globalThis.fetch;
-    globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network failed"));
+    const mockFetch = vi.fn<typeof fetch>();
+    mockFetch.mockRejectedValue(new Error("Network failed"));
+    globalThis.fetch = mockFetch;
 
     const res = await fetchDns({
       server: "https://dns.google/resolve",
@@ -130,12 +123,12 @@ describe("resolveDns (Native DNS)", () => {
 
 describe("IPC handler wrappers (fetchHost & resolveHost)", () => {
   it("returns empty array if host name is empty", async () => {
-    const fetchRes = await fetchHost(mockEvent, "A", "", [
+    const fetchRes = await fetchHost(null, "A", "", [
       { title: "Test", server: "https://test.com", ip: "1.1.1.1" },
     ]);
     expect(fetchRes).toEqual([]);
 
-    const resolveRes = await resolveHost(mockEvent, "A", "", [
+    const resolveRes = await resolveHost(null, "A", "", [
       { title: "Test", server: "https://test.com", ip: "1.1.1.1" },
     ]);
     expect(resolveRes).toEqual([]);

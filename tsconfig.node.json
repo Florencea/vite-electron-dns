@@ -16,8 +16,9 @@
     "noEmit": true,
     "composite": true,
 
-    /* Linting */
+    /* Linting & Erasable Syntax */
     "strict": true,
+    "erasableSyntaxOnly": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noUnusedLocals": true,

@@ -31,9 +31,7 @@ test("E2E Type Contract: DnsQueryT matches query parameters structure", () => {
     type: "A" | "AAAA";
   }>();
 
-  expectTypeOf<DnsQueryT>()
-    .toHaveProperty("type")
-    .toEqualTypeOf<"A" | "AAAA">();
+  expectTypeOf<DnsQueryT>().toHaveProperty("type").toEqualTypeOf<"A" | "AAAA">();
 });
 
 test("E2E Type Contract: WindowApi contract matches preload exposition", () => {

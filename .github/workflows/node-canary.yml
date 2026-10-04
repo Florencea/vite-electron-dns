@@ -11,7 +11,7 @@ permissions:
 env:
   CI: "true"
   NO_COLOR: "1"
-  NODE_ENV: development
+  PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
 
 defaults:
   run:
@@ -19,48 +19,52 @@ defaults:
 
 jobs:
   canary:
-    name: Upstream Node Canary (Node ${{ matrix.node }} on ubuntu-latest)
+    name: Node ${{ matrix.node-version }} Canary
     runs-on: ubuntu-latest
-    env:
-      NPM_CONFIG_ENGINE_STRICT: "false"
-      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
     strategy:
       fail-fast: false
       matrix:
-        node:
+        node-version:
           - 26
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v7
+      - name: Setup Vite+ with Node ${{ matrix.node-version }}
+        uses: voidzero-dev/setup-vp@v1
         with:
-          node-version: ${{ matrix.node }}
-          cache: npm
+          node-version: ${{ matrix.node-version }}
+          cache: true
 
-      - name: Install dependencies (bypass strict engine check)
-        run: npm ci --engine-strict=false
+      - name: Install dependencies
+        run: vp install
+
+      - name: Build production targets
+        continue-on-error: true
+        run: |
+          vp build --mode main
+          vp build --mode preload
+          vp build
 
       - name: Get Playwright version
         id: playwright-version
-        run: echo "version=$(node -p "require('./package.json').devDependencies.playwright")" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(vp exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright Browsers
         uses: actions/cache@v6
+        id: playwright-cache
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-${{ runner.arch }}-playwright-${{ steps.playwright-version.outputs.version }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-playwright-
 
-      - name: Setup test environment
-        run: npm run test:setup
+      - name: Setup test environment (install browser)
+        run: vp run test:setup
 
-      - name: Build production targets
-        run: npm run build
-        continue-on-error: true
+      - name: Install Playwright system dependencies on Linux
+        run: vp exec playwright install-deps chromium
 
       - name: Run unit and component tests
-        run: npm run test:unit
         continue-on-error: true
+        run: vp run agent:test:unit

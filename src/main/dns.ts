@@ -1,7 +1,7 @@
-import type { IpcMainInvokeEvent } from "electron";
 import { Resolver } from "node:dns/promises";
 import { isIPv4, isIPv6 } from "node:net";
 import { URL } from "node:url";
+import { z } from "zod";
 import { SERVERS } from "../shared/servers";
 
 export interface DnsQueryT {
@@ -11,17 +11,13 @@ export interface DnsQueryT {
   type: "A" | "AAAA";
 }
 
-interface AnsT {
-  Answer?: { type: number; data: string }[];
-  Comment?: string;
-  nameServer?: string;
-}
+const AnsSchema = z.object({
+  Answer: z.array(z.object({ type: z.number(), data: z.string() })).optional(),
+  Comment: z.string().optional(),
+  nameServer: z.string().optional(),
+});
 
-export const fetchDns = async ({
-  server,
-  name,
-  type,
-}: DnsQueryT): Promise<string> => {
+export const fetchDns = async ({ server, name, type }: DnsQueryT): Promise<string> => {
   try {
     if (server === "-") {
       return "";
@@ -42,19 +38,26 @@ export const fetchDns = async ({
     if (!res.ok) {
       throw new Error(`Request failed on status ${res.status.toString()}`);
     }
-    const ans = (await res.json()) as AnsT;
-    if (!ans.Answer) {
+    const json: unknown = await res.json();
+    const parsed = AnsSchema.safeParse(json);
+    if (!parsed.success) {
+      return "";
+    }
+    const answer = parsed.data.Answer;
+    if (answer === undefined) {
       return "";
     }
     const data = [
       `${type === "A" ? "ipv4: " : "\nipv6: "}${(t1 - t0).toFixed(2)}ms`,
-      ...ans.Answer.map((d) => d.data).filter((ip) => {
-        if (type === "A") {
-          return isIPv4(ip);
-        } else {
-          return isIPv6(ip);
-        }
-      }),
+      ...answer
+        .map((d) => d.data)
+        .filter((ip) => {
+          if (type === "A") {
+            return isIPv4(ip);
+          } else {
+            return isIPv6(ip);
+          }
+        }),
     ].join("\n");
     return data;
   } catch {
@@ -62,11 +65,7 @@ export const fetchDns = async ({
   }
 };
 
-export const resolveDns = async ({
-  ip,
-  name,
-  type,
-}: DnsQueryT): Promise<string> => {
+export const resolveDns = async ({ ip, name, type }: DnsQueryT): Promise<string> => {
   try {
     const resolver = new Resolver();
     if (ip !== "-") {
@@ -89,25 +88,21 @@ export const resolveDns = async ({
 };
 
 export const fetchHost = (
-  _: IpcMainInvokeEvent,
+  _event: unknown,
   type: DnsQueryT["type"],
   name: string,
   servers: { title: string; server: string; ip: string }[] = SERVERS,
 ): Promise<string[]> =>
-  name
-    ? Promise.all(
-        servers.map(({ server, ip }) => fetchDns({ server, name, type, ip })),
-      )
+  name.length > 0
+    ? Promise.all(servers.map(({ server, ip }) => fetchDns({ server, name, type, ip })))
     : Promise.resolve([]);
 
 export const resolveHost = (
-  _: IpcMainInvokeEvent,
+  _event: unknown,
   type: DnsQueryT["type"],
   name: string,
   servers: { title: string; server: string; ip: string }[] = SERVERS,
 ): Promise<string[]> =>
-  name
-    ? Promise.all(
-        servers.map(({ server, ip }) => resolveDns({ server, name, type, ip })),
-      )
+  name.length > 0
+    ? Promise.all(servers.map(({ server, ip }) => resolveDns({ server, name, type, ip })))
     : Promise.resolve([]);

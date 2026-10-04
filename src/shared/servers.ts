@@ -59,16 +59,14 @@ export const SERVERS: ServerT[] = [
   },
   {
     title: "Hinet 1",
-    description:
-      "A public DNS resolver operated by ISP Chunghwa Telecom (dns.hinet.net)",
+    description: "A public DNS resolver operated by ISP Chunghwa Telecom (dns.hinet.net)",
     document: "-",
     server: "-",
     ip: "168.95.1.1",
   },
   {
     title: "Hinet 2",
-    description:
-      "A public DNS resolver operated by ISP Chunghwa Telecom (hntp1.hinet.net)",
+    description: "A public DNS resolver operated by ISP Chunghwa Telecom (hntp1.hinet.net)",
     document: "-",
     server: "-",
     ip: "168.95.192.1",

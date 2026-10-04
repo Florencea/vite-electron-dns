@@ -17,18 +17,14 @@
     "composite": true,
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting & Erasable Syntax */
     "strict": true,
+    "erasableSyntaxOnly": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/renderer/**/*",
-    "src/preload/*.d.ts",
-    "src/shared/**/*",
-    "test/renderer/**/*"
-  ]
+  "include": ["src/renderer/**/*", "src/preload/*.d.ts", "src/shared/**/*", "test/renderer/**/*"]
 }

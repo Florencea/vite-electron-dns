@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 import { App } from "../../src/renderer/App";
 import type { ModeT, ServerT } from "../../src/shared/types";
+
+type QueryFn = (mode: ModeT, name: string) => Promise<string[]>;
 
 const mockServers: ServerT[] = [
   {
@@ -21,43 +24,37 @@ const mockServers: ServerT[] = [
   },
 ];
 
+const renderComponent = async () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+      mutations: { retry: false },
+    },
+  });
+
+  return await render(
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>,
+  );
+};
+
 describe("<App /> in Browser Mode", () => {
-  let queryIpv4Mock: ReturnType<typeof vi.fn>;
-  let queryIpv6Mock: ReturnType<typeof vi.fn>;
+  let queryIpv4Mock: Mock<QueryFn>;
+  let queryIpv6Mock: Mock<QueryFn>;
 
   beforeEach(() => {
-    queryIpv4Mock = vi.fn().mockResolvedValue(["ipv4: 12.34ms\n93.184.216.34"]);
+    queryIpv4Mock = vi.fn<QueryFn>().mockResolvedValue(["ipv4: 12.34ms\n93.184.216.34"]);
     queryIpv6Mock = vi
-      .fn()
+      .fn<QueryFn>()
       .mockResolvedValue(["ipv6: 15.67ms\n2606:2800:220:1:248:1893:25c8:1946"]);
 
     window.api = {
       servers: mockServers,
-      queryIpv4: queryIpv4Mock as (
-        mode: ModeT,
-        name: string,
-      ) => Promise<string[]>,
-      queryIpv6: queryIpv6Mock as (
-        mode: ModeT,
-        name: string,
-      ) => Promise<string[]>,
+      queryIpv4: queryIpv4Mock,
+      queryIpv6: queryIpv6Mock,
     };
   });
-
-  const renderComponent = async () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { retry: false },
-        mutations: { retry: false },
-      },
-    });
-
-    return await render(
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>,
-    );
-  };
 
   it("renders server cards in default DNS mode", async () => {
     const screen = await renderComponent();

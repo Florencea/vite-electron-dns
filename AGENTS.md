@@ -1,147 +1,74 @@
+<!--VITE PLUS START-->
+
+## Vite+ Guidelines
+
+This project uses Vite+ to manage development tools. Always use `vp` (or `vpr` shorthand for `vp run`) to run commands:
+
+- `vpr <script>` (or `vp run <script>`): Run scripts from `package.json`
+- `vp install`: Install dependencies
+- `vp update`: Update dependencies
+- `vp test`: Run Vitest tests
+- `vp check`: Run linter, typecheck, format checks
+- `vp fmt`: Run formatter
+- `vp lint`: Run linter
+
+<!--VITE PLUS END-->
+
 # Agent Development Guidelines
 
-Guidelines for AI agents and developers working on this repository.
+Guidelines for AI agents and human contributors working on this repository.
 
-## 1. Architectural Conventions
+## 1. Architecture Map
 
-- **Main Process (`src/main/`)**:
-  - Responsible for Electron application lifecycle, window management, system menus, and backend networking.
-  - DNS resolution and DoH logic reside in `src/main/dns.ts`.
-  - Never import browser-only APIs here.
-- **Preload Bridge (`src/preload/`)**:
-  - Exposes typed APIs to the renderer via `contextBridge.exposeInMainWorld("api", ...)`.
-  - Type definitions reside in `src/preload/index.d.ts`.
-  - **Security**: Never expose raw Node.js modules or raw `ipcRenderer` directly to the renderer. Context isolation is mandatory.
-- **Renderer (`src/renderer/`)**:
-  - React single-page UI built with Adobe React Spectrum and Tailwind CSS.
-  - Root `index.html` mounts `/src/renderer/main.tsx`.
-  - Queries and mutations are managed through `@tanstack/react-query`.
-  - All communication with the main process must pass through typed `window.api`.
-  - **React Compiler**: Automatic fine-grained memoization is enabled via `@vitejs/plugin-react` (`reactCompilerPreset`) and `@rolldown/plugin-babel`. Do not write manual `useMemo`, `useCallback`, or `React.memo` unless handling non-compiler edge cases. Conforms strictly to `eslint-plugin-react-hooks`'s `recommended-latest` rules.
-  - **Tailwind Canonical Classes**: Enforce Tailwind CSS v4 canonical class syntax via headless `@tailwindcss/language-server`. Run `npm run lint:tailwind` to diagnose non-canonical classes and `npm run lint:tailwind:fix` to auto-fix.
-- **Shared (`src/shared/`)**:
-  - Cross-process interfaces in `src/shared/types.ts` (`ModeT`, `ServerT`).
-  - Single Source of Truth for DNS server presets in `src/shared/servers.ts`.
-- **Build & Development Architecture**:
-  - Native Vite powered by Rolldown (zero third-party Electron wrapper frameworks).
-  - Multi-target build: `build:main` (Node SSR), `build:preload` (Node SSR), `build:renderer` (Client SPA).
-  - Native TypeScript development runner in `scripts/dev.ts` executed directly by Node.
-- **Packaging & Release**:
-  - `electron-builder` packages installable artifacts into `release/`.
-  - Payload explicitly whitelists `dist/**/*` and `build/icon.png`.
-- **Language & Documentation**:
-  - Keep code comments and commit messages in concise English.
-  - User-facing UI labels support English and Traditional Chinese where appropriate.
+| Layer        | Path             | Responsibility                                                |
+| :----------- | :--------------- | :------------------------------------------------------------ |
+| **Main**     | `src/main/`      | Electron app lifecycle, window management, DNS & DoH engine   |
+| **Preload**  | `src/preload/`   | Secure context bridge exposing typed `window.api`             |
+| **Renderer** | `src/renderer/`  | React 19 UI with Adobe React Spectrum & Tailwind CSS v4       |
+| **Shared**   | `src/shared/`    | Cross-process contracts (`ModeT`, `ServerT`) & DNS presets    |
+| **Tests**    | `test/`          | Dual-track testing: Chromium browser (renderer) & Node (main) |
+| **Tooling**  | `scripts/`       | Tailwind CSS validator, smoke tests, packaging runners        |
+| **Rules**    | `.agents/rules/` | Domain-specific modular rules activated via file globbing     |
 
-## 2. Strict Coding Standards
+---
 
-- **No `any`**: Always provide explicit TypeScript types or generics. `@typescript-eslint/no-explicit-any` is strictly enforced.
-- **Strict Boundary Defense**: `noUncheckedIndexedAccess: true` and `exactOptionalPropertyTypes: true` are active in all `tsconfig*.json` targets. Check array indices and optional values defensively.
-- **No `@ts-ignore` / No `@ts-nocheck`**: Use `@ts-expect-error` with a descriptive reason only if strictly unavoidable (minimum 5 characters).
-- **Strict Hook Dependencies**: `react-hooks/exhaustive-deps` is set to `error`.
-- **No Floating Promises**: Always `await` or prefix with `void` when intentionally unhandled.
-- **No Dead Code**: Do not leave unused dependencies, unused files, or unused exports. Knip enforces this (`knip: { playwright: true }`).
-- **No Linter Workarounds**: Never weaken `eslint.config.ts`. Fix code directly to satisfy strict ESLint and TypeScript rules.
-- **Explicit String Conversions**: Call `.toString()` on numbers in template literals.
-- **Trust React Compiler for Automatic Memoization**: Never add manual `useMemo`, `useCallback`, or `React.memo` without an explicit, documented edge-case rationale.
+## 2. Core SSOT & Invariants
 
-## 3. Testing & Ergonomics Standards
+- **Single Source of Truth**:
+  - DNS presets reside strictly in `src/shared/servers.ts`.
+  - Cross-process contracts reside in `src/shared/types.ts`.
+  - Styling tokens reside in `src/renderer/index.css` via Tailwind CSS v4 `@theme`.
+- **Security & Context Isolation**:
+  - Main process never imports browser-only APIs; preload exposes only typed methods via `contextBridge`.
+  - Raw Node.js modules or raw `ipcRenderer` must never be exposed to the renderer.
+- **Automatic Memoization**:
+  - React Compiler via `@vitejs/plugin-react` (`compiler: true`) and `oxc-transform-react`.
+  - Do not add manual `useMemo`, `useCallback`, or `React.memo` unless handling documented edge cases.
+- **Domain Rules**: Path-specific rules live under `.agents/rules/` (`electron-main`, `ui-styling`, `testing`, `ci-workflows`).
 
-- **Dual-Track Testing Architecture**:
-  - **Renderer (`test:renderer`)**: Runs inside headless Chromium (`@vitest/browser-playwright`) using `vitest-browser-react`. Mounts components with `<QueryClientProvider>` and mock `window.api`.
-  - **Main (`test:main`)**: Runs in Node.js environment. Tests DNS resolution algorithms, network error resilience, and preset server configurations.
-- **Browser Focus Protection**: Chromium browser instances must explicitly declare `headless: true` in `vitest.config.ts` to prevent test runners from popping up windows and stealing OS window focus.
-- **Test Output Silence**: Configured with `silent: "passed-only"` to suppress noisy logs when tests pass, while immediately surfacing logs on failure to facilitate debugging.
-- **Focused Tests (`.only`) Guard**: Vitest enforces `allowOnly: !process.env.CI`. Human developers may use `.only` during local debugging, but it is strictly forbidden in CI and automated Agent verification.
-- **End-to-End Type Safety**:
-  - Static contracts in `test/canary/e2e-type-contract.test.ts` verify `Window["api"]`, `ModeT`, and `ServerT` shapes using `expectTypeOf`.
-- **Selector Standards**:
-  - Prefer accessible queries (`screen.getByRole`, `screen.getByLabelText`) or explicit `data-testid`.
-  - Never query by volatile generated CSS classes.
-- **Assertion Rigor**:
-  - For browser UI elements, assert both DOM presence and visibility:
-    - `await expect.element(el).toBeInTheDocument()`
-    - `await expect.element(el).toBeVisible()`
+---
 
-## 4. Feature Development Workflow (Agent-First TDD)
+## 3. Frictionless Execution (Whitelist-First)
 
-When implementing a new feature or IPC handler, follow this end-to-end type-safe flow:
+Prioritize `vpr agent:*` commands matching Antigravity's security whitelist:
 
-1. **Shared Contract First (`src/shared/types.ts`)**:
-   - Define data contracts, parameters, and return types.
-2. **Main Handler & Node Test (`src/main/`, `test/main/`)**:
-   - Implement the logic in `src/main/`.
-   - Write unit tests in `test/main/` to verify functional correctness, status codes, and edge cases.
-   - Register the handler via `ipcMain.handle()` in `src/main/index.ts`.
-3. **Preload Exposure & Type Declaration (`src/preload/`)**:
-   - Expose the method in `src/preload/index.ts`.
-   - Update `src/preload/index.d.ts` so `Window["api"]` reflects the new interface.
-   - Add/update canary tests in `test/canary/e2e-type-contract.test.ts`.
-4. **Renderer UI (`src/renderer/`)**:
-   - Connect UI components using `useMutation` or `useQuery` from TanStack Query.
-   - Build accessible Spectrum controls in `src/renderer/App.tsx` or new components.
-5. **Browser Mode Test (`test/renderer/`)**:
-   - Write UI interaction and mutation dispatch tests in `test/renderer/`.
-   - Assert accessible selectors and state transitions.
-6. **Pass Stepped Agent Verification Ladder**:
-   - Micro-iterations / edits: `npm run agent:verify:inner`
-   - Test module updates: `npm run agent:test:unit`
-   - Full gate validation: `npm run agent:verify:gate`
+- **Gate**: `vpr agent:verify:gate` (unit -> build -> app:pack -> e2e)
+- **Inner Loop**: `vpr agent:verify:inner` (typecheck + lint)
+- **Unit Tests**: `vpr agent:test:unit`
+- **Lint & Fix**: `vpr agent:lint:fix`, `vpr agent:lint:tailwind:fix`
+- **Type Check**: `vpr agent:typecheck`
+- **CI Lint**: `vpr agent:lint:ci` (`actionlint` 0 errors/warnings)
 
-## 5. Verification Gate (Definition of Done)
+---
 
-### Agent Verification Ladder
+## 4. Git Workflow & Commit Restrictions
 
-- **Inner Loop (`npm run agent:verify:inner`)**:
-  Executes `agent:typecheck` (`tsc -b --pretty false`) and `agent:lint` (`eslint --no-color --no-inline-config --max-warnings 0` + `lint:tailwind`).
-- **Unit Verification (`npm run agent:verify:unit`)**:
-  Executes `agent:verify:inner` followed by `agent:test:unit` (`vitest run --reporter=tap-flat --no-color`).
-- **Gate Pipeline (`npm run agent:verify:gate`)**:
-  Executes `agent:verify:unit` -> `build` -> `pack` -> `agent:test:e2e` (`node scripts/smoke-test.ts`).
+- **NEVER execute `git commit` directly**: Local environment uses 1Password SSH signing; non-interactive commit fails.
+- **Protocol**: Stage changes with `git add <files>` and output `git commit -m "..."` in English for user to run locally.
 
-### Full Quality Gate (Definition of Done)
+---
 
-Before completing any task or commit, execute the unified verification gate:
+## 5. Language & Planning Standards
 
-```bash
-npm run check
-```
-
-Runs:
-
-1. `typecheck` (`tsc -b` in strict mode)
-2. `lint` (ESLint strict + stylistic type checks)
-3. `lint:tailwind` (Official Tailwind CSS v4 diagnostic & canonical class check via headless `@tailwindcss/language-server`)
-4. `format:check` (Prettier code style verification)
-5. `check:deadcode` (Knip dead-code audit)
-6. `test` (Vitest dual-track tests: Chromium browser + Node tests)
-7. `build` (Native Vite multi-target build: main, preload, renderer)
-8. `pack` (Electron-builder unpacked directory packaging validation)
-
-All checks must pass with 0 errors and 0 warnings.
-
-### CI Workflow Verification (Shift-Left Guardrail)
-
-Whenever `.github/workflows/` files are added or modified:
-
-- **Mandatory Local Audit**: Running `actionlint` locally with **0 errors and 0 warnings** is a strict prerequisite before staging any workflow changes.
-- **Commands**:
-  - Direct execution: `actionlint`
-  - Agent / script execution: `npm run agent:lint:ci` (or `npm run lint:ci`)
-- **Offline / Shift-Left Policy**: `actionlint` is strictly an offline, local developer and agent verification guardrail. It **must not** be embedded or added as a step or job inside remote GitHub Actions workflows (`ci.yml` or `node-canary.yml`). Remote CI runners focus on multi-platform builds, packaging, and dual-track test execution.
-
-### Continuous Integration (CI/CD) Architecture
-
-- **Tiered Daily CI (`.github/workflows/ci.yml`)**:
-  - **Tier 1 (`gatekeeper`)**: Executes on `ubuntu-latest` using authoritative Node.js (`package.json`). Runs clean install, Playwright browser caching, full quality gate (`format:check`, `agent:verify:inner`, `check:deadcode`, `test`, `build`, `pack`), Linux distribution packaging (`build:linux`), and headless Electron E2E journeys (`xvfb-run npm run test:e2e`).
-  - **Tier 2 (`platform-compat`)**: Gated on `gatekeeper` success across `windows-latest` and `macos-latest`. Validates native compilers (Rolldown, LightningCSS), multi-target builds, path separators / runtime behavior (`test:unit`), and platform packaging (`build:mac`, `build:win`) without repeating static checks or E2E tests.
-- **Upstream Node Canary (`.github/workflows/node-canary.yml`)**:
-  - Scheduled weekly workflow testing upcoming Node.js release lines (Node 26) with `--engine-strict=false` and `continue-on-error: true` to detect upstream runtime regressions proactively.
-
-## 6. Git Workflow & Commit Restrictions
-
-- **NEVER execute `git commit` directly**: Local environment uses 1Password SSH signing; running `git commit` in non-interactive/subshell will fail.
-- **Standard Protocol**:
-  1. For workflow changes under `.github/workflows/`, verify clean execution via `actionlint` or `npm run agent:lint:ci` (0 errors, 0 warnings).
-  2. Stage changes with `git add <files>`.
-  3. Output the complete `git commit -m "..."` command with a concise commit message in English in chat for user to review and run locally.
+- **Traditional Chinese for Plans & Responses**: All plans (`/plan`), walkthroughs, and chat responses must strictly be written in **Traditional Chinese (繁體中文)**.
+- **Code Artifacts**: Source code, inline comments, commit messages, and automated tests must use concise English.

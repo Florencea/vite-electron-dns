@@ -1,14 +1,29 @@
 import electron from "electron";
 import { SERVERS } from "../shared/servers";
 import type { ModeT, WindowApi } from "../shared/types";
+
 const { contextBridge, ipcRenderer } = electron;
+
+const queryIpv4 = async (mode: ModeT, name: string): Promise<string[]> => {
+  const result: unknown = await ipcRenderer.invoke(mode, "A", name, SERVERS);
+  if (Array.isArray(result)) {
+    return result.filter((item): item is string => typeof item === "string");
+  }
+  return [];
+};
+
+const queryIpv6 = async (mode: ModeT, name: string): Promise<string[]> => {
+  const result: unknown = await ipcRenderer.invoke(mode, "AAAA", name, SERVERS);
+  if (Array.isArray(result)) {
+    return result.filter((item): item is string => typeof item === "string");
+  }
+  return [];
+};
 
 const api: WindowApi = {
   servers: SERVERS,
-  queryIpv4: (mode: ModeT, name: string) =>
-    ipcRenderer.invoke(mode, "A", name, SERVERS) as Promise<string[]>,
-  queryIpv6: (mode: ModeT, name: string) =>
-    ipcRenderer.invoke(mode, "AAAA", name, SERVERS) as Promise<string[]>,
+  queryIpv4,
+  queryIpv6,
 };
 
 try {
