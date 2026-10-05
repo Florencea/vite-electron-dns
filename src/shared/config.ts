@@ -4,6 +4,6 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG = {
-  title: "Vite Electron DNS",
-  appId: "com.florencea.viteelectrondns",
+  title: "VP Electron DNS",
+  appId: "com.florencea.vpelectrondns",
 } as const satisfies AppConfig;

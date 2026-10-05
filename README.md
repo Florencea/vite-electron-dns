@@ -1,7 +1,7 @@
-# Vite Electron DNS
+# VP Electron DNS
 
-[![CI](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/ci.yml)
-[![Node Canary](https://github.com/Florencea/vite-electron-dns/actions/workflows/node-canary.yml/badge.svg)](https://github.com/Florencea/vite-electron-dns/actions/workflows/node-canary.yml)
+[![CI](https://github.com/Florencea/vp-electron-dns/actions/workflows/ci.yml/badge.svg)](https://github.com/Florencea/vp-electron-dns/actions/workflows/ci.yml)
+[![Node Canary](https://github.com/Florencea/vp-electron-dns/actions/workflows/node-canary.yml/badge.svg)](https://github.com/Florencea/vp-electron-dns/actions/workflows/node-canary.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A modern, high-performance DNS and DNS-over-HTTPS (DoH) benchmarking desktop application powered by **Electron**, **Vite+**, **React 19**, **Adobe React Spectrum**, **Tailwind CSS v4**, and **TanStack Query**.
