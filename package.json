@@ -25,7 +25,7 @@
     "test:setup": "playwright install chromium"
   },
   "devDependencies": {
-    "@adobe/react-spectrum": "3.47.5",
+    "@adobe/react-spectrum": "3.47.6",
     "@tailwindcss/language-server": "0.16.0",
     "@tailwindcss/vite": "4.3.3",
     "@tanstack/react-query": "5.104.1",
@@ -34,11 +34,11 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
     "@vitest/browser-playwright": "catalog:",
-    "electron": "44.5.1",
+    "electron": "44.7.0",
     "electron-builder": "26.17.0",
-    "knip": "6.39.0",
+    "knip": "6.40.0",
     "oxc-transform-react": "0.153.0",
-    "playwright": "1.63.0",
+    "playwright": "1.64.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "tailwindcss": "4.3.3",
