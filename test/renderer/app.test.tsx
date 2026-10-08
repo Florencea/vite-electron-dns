@@ -1,9 +1,7 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { Mock } from "vitest";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import { render } from "vitest-browser-react";
-import { App } from "../../src/renderer/App";
+import type { Mock } from "vite-plus/test";
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 import type { ModeT, ServerT } from "../../src/shared/types";
+import { renderApp } from "./test-utils";
 
 type QueryFn = (mode: ModeT, name: string) => Promise<string[]>;
 
@@ -24,21 +22,6 @@ const mockServers: ServerT[] = [
   },
 ];
 
-const renderComponent = async () => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: { retry: false },
-      mutations: { retry: false },
-    },
-  });
-
-  return await render(
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>,
-  );
-};
-
 describe("<App /> in Browser Mode", () => {
   let queryIpv4Mock: Mock<QueryFn>;
   let queryIpv6Mock: Mock<QueryFn>;
@@ -57,7 +40,7 @@ describe("<App /> in Browser Mode", () => {
   });
 
   it("renders server cards in default DNS mode", async () => {
-    const screen = await renderComponent();
+    const screen = await renderApp();
 
     const googleHeading = screen.getByRole("heading", {
       name: "Google Public DNS",
@@ -75,7 +58,7 @@ describe("<App /> in Browser Mode", () => {
   });
 
   it("filters out non-DoH servers when switching mode to 'DNS over HTTPS'", async () => {
-    const screen = await renderComponent();
+    const screen = await renderApp();
 
     const pureDnsHeading = screen.getByRole("heading", {
       name: "Pure DNS Provider",
@@ -99,7 +82,7 @@ describe("<App /> in Browser Mode", () => {
   });
 
   it("triggers queries upon domain form submission", async () => {
-    const screen = await renderComponent();
+    const screen = await renderApp();
 
     const submitBtn = screen.getByRole("button", { name: /submit/i });
     await expect.element(submitBtn).toBeVisible();
@@ -114,7 +97,7 @@ describe("<App /> in Browser Mode", () => {
   });
 
   it("clears results when clicking Reset", async () => {
-    const screen = await renderComponent();
+    const screen = await renderApp();
 
     const resetBtn = screen.getByRole("button", { name: /reset/i });
     await expect.element(resetBtn).toBeVisible();

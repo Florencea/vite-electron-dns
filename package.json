@@ -45,8 +45,6 @@
     "typescript": "7.0.2",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vitest": "catalog:",
-    "vitest-browser-react": "2.3.0",
     "vscode-languageserver-protocol": "3.18.4",
     "zod": "4.6.5"
   },

@@ -13,7 +13,7 @@ Standards for unit, component, and integration testing across this codebase.
 Tests are split into two Vitest workspace projects configured directly in `vite.config.ts`:
 
 - **Renderer Project (`test/renderer/**`)**:
-  - Runs in headless Chromium via `@vitest/browser-playwright` and `vitest-browser-react`.
+  - Runs in headless Chromium via native `vite-plus/test/browser` and Playwright.
   - Mounts components with `<QueryClientProvider>` and mock `window.api`.
   - Verifies interactive component state, user selections, and DOM accessibility.
 - **Main Project (`test/main/**`)**:

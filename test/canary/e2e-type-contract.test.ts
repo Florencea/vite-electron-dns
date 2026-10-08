@@ -1,4 +1,4 @@
-import { expectTypeOf, test } from "vitest";
+import { expectTypeOf, test } from "vite-plus/test";
 import type { DnsQueryT } from "../../src/main/dns";
 import type { AppConfig } from "../../src/shared/config";
 import type { ModeT, ServerT, WindowApi } from "../../src/shared/types";
